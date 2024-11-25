@@ -2,6 +2,7 @@ package com.imprologic.shaketocall
 
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -14,14 +15,10 @@ import android.telecom.TelecomManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
+import android.widget.CheckBox
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -47,6 +44,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var shakeThreshold = 12.0f
     private val predefinedNumber = "5555555555"
 
+    private lateinit var preferences: SharedPreferences
+    private lateinit var shakeToAnswerCheckbox: CheckBox
+
     private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var sensorManager: SensorManager
 
@@ -57,7 +57,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         showLayout()
+        loadPreferences()
         registerPermissionHandler()
         setupSensors()
     }
@@ -74,19 +76,22 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
+
     private fun showLayout() {
-        enableEdgeToEdge()
-        setContent {
-            MainTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+        shakeToAnswerCheckbox = findViewById(R.id.checkbox_shake_to_answer)
+        shakeToAnswerCheckbox.setOnCheckedChangeListener {
+                buttonView, isChecked -> onPreferencesChange()
         }
+
     }
+
+
+    private fun loadPreferences() {
+        // Retrieve and set stored preferences
+        shakeToAnswerCheckbox.isChecked = preferences.getBoolean("shake_to_answer", false)
+    }
+
 
     private fun registerPermissionHandler() {
         // Initialize the launcher for requesting permissions
@@ -181,6 +186,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             data = Uri.parse("tel:$predefinedNumber")
         }
         startActivity(callIntent)
+    }
+
+
+    private fun onPreferencesChange() {
+        preferences.edit().apply {
+            putBoolean("shake_to_answer", shakeToAnswerCheckbox.isChecked)
+            apply()
+        }
     }
 
 }
