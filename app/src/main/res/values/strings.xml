@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Shake To Call / Answer</string>
+    <string name="shake_to_answer">Shake to Answer</string>
 </resources>

@@ -1,33 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Scutură pentru a suna / răspunde</string>
-
-    <string name="incoming_call_options">Opțiuni apelare</string>
-    <string name="shake_to_call">Scutură pentru a apela</string>
-    <string name="shake_to_call_description">"Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune"</string>
-    <string name="description_number_to_call">Apăsați aici pentru a introduce un numar, sau pe simbolul din dreapta pentru a alege din agendă</string>
-    <string name="alert_number_to_call">Introduceți numărul mai jos</string>
-    <string name="label_number_to_call">Număr apelat</string>
-
-    <string name="outgoing_call_options">Opțiuni răspuns</string>
     <string name="shake_to_answer">Scutură pentru a răspunde</string>
-    <string name="shake_to_answer_description">Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune</string>
-    <string name="shake_to_hang_up">Scutură pentru a închide</string>
-    <string name="shake_to_hang_up_description">Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune</string>
-
-    <string name="service_notification_title">Detector scuturare pornit</string>
-    <string name="service_notification_content">Scuturarea și apelurile sunt monitorizate</string>
-
-    <string name="advanced_options">Opțiuni avansate</string>
-    <string name="shake_magnitude">Magnitudinea scuturării</string>
-    <string name="shake_metric">m/s2</string>
-    <string name="z_axis_factor">Contributia axei Z</string>
-
-    <string name="reset_advanced_preferences">Resetați opțiunile avansate</string>
-    <string name="reset_advanced_preferences_confirmation">Resetați opțiunile avansate?</string>
-    <string name="reset_advanced_preferences_description">Apăsați aici pentru a reseta opțiunile avansate</string>
-
-    <string name="accessibility_label_contacts">Alege din Agendă</string>
-    <string name="accessibility_label_number_to_call">Număr telefon</string>
-
 </resources>
