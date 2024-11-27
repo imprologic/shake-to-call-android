@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     private fun showLayout() {
         setContentView(R.layout.activity_main)
-        shakeToAnswerCheckbox = findViewById(R.id.checkbox_shake_to_answer)
+        shakeToAnswerCheckbox = findViewById(R.id.option_shake_to_answer)
         shakeToAnswerCheckbox.setOnCheckedChangeListener {
                 buttonView, isChecked -> onPreferencesChange()
         }
