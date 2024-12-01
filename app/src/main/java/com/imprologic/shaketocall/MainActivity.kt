@@ -20,6 +20,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.imprologic.shaketocall.ui.AnswerOptionsWidget
 import com.imprologic.shaketocall.ui.CallOptionsWidget
 
@@ -46,7 +48,7 @@ fun ScaffoldContainer() {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Small Top App Bar")
+                    Text(text = stringResource(id = R.string.app_name))
                 }
             )
         },
@@ -86,11 +88,13 @@ fun AdaptiveLayout(innerPadding: PaddingValues) {
         ) {
             CallOptionsWidget(
                 modifier = Modifier
+                    .padding(16.dp)
                     .weight(1f)
                     .fillMaxWidth()
             )
             AnswerOptionsWidget(
                 modifier = Modifier
+                    .padding(PaddingValues(16.dp, 0.dp, 16.dp, 16.dp))
                     .weight(1f)
                     .fillMaxWidth()
             )
