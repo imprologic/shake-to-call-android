@@ -1,13 +1,19 @@
 package com.imprologic.shaketocall.ui
 
+import android.widget.EditText
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 import com.imprologic.shaketocall.R
@@ -15,6 +21,8 @@ import com.imprologic.shaketocall.R
 
 @Composable
 fun CallOptionsWidget(modifier: Modifier) {
+    val textState = remember { mutableStateOf("") }
+
     OutlinedCard(
         modifier = modifier
     ) {
@@ -25,6 +33,13 @@ fun CallOptionsWidget(modifier: Modifier) {
                 modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp)
             )
             AccessibleSwitch()
+            TextField(
+                value = textState.value,
+                onValueChange = { textState.value = it },
+                label = { Text(text = "Enter phone to call") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
         }
     }
 }
