@@ -2,5 +2,7 @@
     <string name="app_name">Shake To Call / Answer</string>
     <string name="shake_to_answer">Shake to Answer</string>
     <string name="shake_to_call">Shake to call</string>
+    <string name="label_on">ON</string>
+    <string name="label_off">OFF</string>
     <string name="label_number_to_call">Number to call</string>
 </resources>
