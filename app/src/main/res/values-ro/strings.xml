@@ -3,5 +3,7 @@
     <string name="app_name">Scutură pentru a suna / răspunde</string>
     <string name="shake_to_answer">Scutură pentru a răspunde</string>
     <string name="shake_to_call">Scutură pentru a apela</string>
+    <string name="label_on">PORNIT</string>
+    <string name="label_off">OPRIT</string>
     <string name="label_number_to_call">Număr apelat</string>
 </resources>
