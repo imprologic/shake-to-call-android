@@ -7,11 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,14 +20,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
+import com.imprologic.shaketocall.ui.AnswerOptionsWidget
+import com.imprologic.shaketocall.ui.CallOptionsWidget
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SmallTopAppBarExample()
+            ScaffoldContainer()
         }
     }
 
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SmallTopAppBarExample() {
+fun ScaffoldContainer() {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,13 +51,13 @@ fun SmallTopAppBarExample() {
             )
         },
     ) { innerPadding ->
-        MainLayout(innerPadding)
+        AdaptiveLayout(innerPadding)
     }
 }
 
 
 @Composable
-fun MainLayout(innerPadding: PaddingValues) {
+fun AdaptiveLayout(innerPadding: PaddingValues) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -67,9 +67,16 @@ fun MainLayout(innerPadding: PaddingValues) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            FirstWidget()
-            Spacer(modifier = Modifier.width(16.dp))
-            SecondWidget()
+            CallOptionsWidget(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+            AnswerOptionsWidget(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
         }
     } else {
         Column(
@@ -77,23 +84,19 @@ fun MainLayout(innerPadding: PaddingValues) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            FirstWidget()
-            Spacer(modifier = Modifier.height(16.dp))
-            SecondWidget()
+            CallOptionsWidget(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+            AnswerOptionsWidget(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
         }
     }
 }
 
-@Composable
-fun FirstWidget() {
-    Text(
-        text = "Hello accessibility!"
-    )
-}
 
-@Composable
-fun SecondWidget() {
-    Text(
-        text = "This should work!"
-    )
-}
+
