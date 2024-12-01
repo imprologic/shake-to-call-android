@@ -3,7 +3,9 @@ package com.imprologic.shaketocall
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,15 +44,34 @@ fun SmallTopAppBarExample() {
             )
         },
     ) { innerPadding ->
-        MessageCard(innerPadding)
+        MainLayout(innerPadding)
     }
 }
 
 
 @Composable
-fun MessageCard(innerPadding: PaddingValues) {
+fun MainLayout(innerPadding: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
+        FirstWidget()
+        SecondWidget()
+    }
+}
+
+
+@Composable
+fun FirstWidget() {
     Text(
-        text = "Hello accessibility!",
-        modifier = Modifier.padding(innerPadding)
+        text = "Hello accessibility!"
+    )
+}
+
+@Composable
+fun SecondWidget() {
+    Text(
+        text = "This should work!"
     )
 }
