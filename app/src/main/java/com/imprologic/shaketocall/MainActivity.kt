@@ -91,7 +91,7 @@ fun AdaptiveLayout(innerPadding: PaddingValues) {
             CallOptionsWidget(
                 modifier = Modifier
                     .padding(16.dp)
-                    .weight(1f)
+                    .weight(1.1f)
                     .fillMaxWidth()
             )
             AnswerOptionsWidget(
