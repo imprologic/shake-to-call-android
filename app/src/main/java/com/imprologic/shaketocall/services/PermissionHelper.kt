@@ -14,27 +14,17 @@ class PermissionHelper(private val activity: ComponentActivity) {
 
     val tag = "PermissionHelper"
 
-    private val requiredPermissions: List<String>
-        get() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                return listOf(
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CALL_PHONE,
-                    Manifest.permission.ANSWER_PHONE_CALLS,
-                    Manifest.permission.POST_NOTIFICATIONS,
-                )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                return listOf(
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CALL_PHONE,
-                    Manifest.permission.ANSWER_PHONE_CALLS,
-                )
-            return listOf(
+    private val requiredPermissions =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            listOf(
                 Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.CALL_PHONE
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.ANSWER_PHONE_CALLS
             )
-        }
-
+        else listOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CALL_PHONE
+        )
 
     private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
