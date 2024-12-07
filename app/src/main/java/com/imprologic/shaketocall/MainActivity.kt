@@ -22,16 +22,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.imprologic.shaketocall.services.PermissionHelper
 import com.imprologic.shaketocall.ui.AnswerOptionsWidget
 import com.imprologic.shaketocall.ui.CallOptionsWidget
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var permissionHelper: PermissionHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ScaffoldContainer()
         }
+        permissionHelper = PermissionHelper(this)
+        permissionHelper.registerPermissionHandler()
     }
 
 }
