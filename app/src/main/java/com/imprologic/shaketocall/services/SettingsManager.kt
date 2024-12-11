@@ -1,19 +1,13 @@
 package com.imprologic.shaketocall.services
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.activity.ComponentActivity
 
 
-class SettingsManager(context: Context) {
+class SettingsManager(activity: ComponentActivity) {
 
-    companion object {
-        const val DEFAULT_SHAKE_MAGNITUDE = 14.0f
-        const val DEFAULT_Z_AXIS_FACTOR = 0.3f
-    }
-
-
-    val prefs: SharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE)
+    val prefs: SharedPreferences = activity.getSharedPreferences("app_prefs", MODE_PRIVATE)
 
     var shakeToCall: Boolean
         get() = prefs.getBoolean("shake_to_call", false)
@@ -32,29 +26,5 @@ class SettingsManager(context: Context) {
         set(value) {
             prefs.edit().putBoolean("shake_to_answer", value).apply()
         }
-
-    var shakeToHangUp: Boolean
-        get() = prefs.getBoolean("shake_to_hang_up", false)
-        set(value) {
-            prefs.edit().putBoolean("shake_to_hang_up", value).apply()
-        }
-
-    var shakeMagnitude: Float
-        get() = prefs.getFloat("shake_magnitude", DEFAULT_SHAKE_MAGNITUDE)
-        set(value) {
-            prefs.edit().putFloat("shake_magnitude", value).apply()
-        }
-
-    var zAxisFactor: Float
-        get() = prefs.getFloat("z_axis_factor", DEFAULT_Z_AXIS_FACTOR)
-        set(value) {
-            prefs.edit().putFloat("z_axis_factor", value).apply()
-        }
-
-
-    fun resetAdvancedPreferences() {
-        shakeMagnitude = DEFAULT_SHAKE_MAGNITUDE
-        zAxisFactor = DEFAULT_Z_AXIS_FACTOR
-    }
 
 }
