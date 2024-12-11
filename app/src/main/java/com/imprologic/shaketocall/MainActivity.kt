@@ -23,17 +23,20 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.imprologic.shaketocall.services.PermissionHelper
+import com.imprologic.shaketocall.services.SettingsManager
 import com.imprologic.shaketocall.ui.AnswerOptionsWidget
 import com.imprologic.shaketocall.ui.CallOptionsWidget
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var settingsManager: SettingsManager
     private lateinit var permissionHelper: PermissionHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        settingsManager = SettingsManager(this)
         setContent {
-            ScaffoldContainer()
+            ScaffoldContainer(settingsManager)
         }
         permissionHelper = PermissionHelper(this)
         permissionHelper.registerPermissionHandler()
@@ -44,7 +47,9 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldContainer() {
+fun ScaffoldContainer(
+    settingsManager: SettingsManager
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -58,13 +63,19 @@ fun ScaffoldContainer() {
             )
         },
     ) { innerPadding ->
-        AdaptiveLayout(innerPadding)
+        AdaptiveLayout(
+            settingsManager,
+            innerPadding    // TODO: Can this be sent as a Modifier
+        )
     }
 }
 
 
 @Composable
-fun AdaptiveLayout(innerPadding: PaddingValues) {
+fun AdaptiveLayout(
+    settingsManager: SettingsManager,
+    innerPadding: PaddingValues
+) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -75,6 +86,7 @@ fun AdaptiveLayout(innerPadding: PaddingValues) {
                 .padding(innerPadding)
         ) {
             CallOptionsWidget(
+                settingsManager,
                 modifier = Modifier
                     .padding(16.dp)
                     .weight(1f)
@@ -94,6 +106,7 @@ fun AdaptiveLayout(innerPadding: PaddingValues) {
                 .padding(innerPadding)
         ) {
             CallOptionsWidget(
+                settingsManager,
                 modifier = Modifier
                     .padding(16.dp)
                     .weight(1.1f)
