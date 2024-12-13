@@ -37,7 +37,12 @@ fun CallOptionsWidget(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp)
             )
-            AccessibleSwitch()
+            AccessibleSwitch(
+                initialChecked = settingsManager.shakeToCall,
+                onCheckedChange = {
+                    settingsManager.shakeToCall = it
+                }
+            )
             TextField(
                 value = textState.value,
                 onValueChange = {
