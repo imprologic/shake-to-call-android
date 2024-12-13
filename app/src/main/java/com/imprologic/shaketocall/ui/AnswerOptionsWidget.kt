@@ -13,10 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
+import com.imprologic.shaketocall.services.SettingsManager
 
 
 @Composable
-fun AnswerOptionsWidget(modifier: Modifier) {
+fun AnswerOptionsWidget(
+    settingsManager: SettingsManager,
+    modifier: Modifier
+) {
     val context = LocalContext.current
 
     OutlinedCard(
@@ -29,8 +33,10 @@ fun AnswerOptionsWidget(modifier: Modifier) {
                 modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp),
             )
             AccessibleSwitch(
-                initialChecked = true,
-                onCheckedChange = {}
+                initialChecked = settingsManager.shakeToAnswer,
+                onCheckedChange = {
+                    settingsManager.shakeToAnswer = it
+                }
             )
             Button(
                 onClick = {
