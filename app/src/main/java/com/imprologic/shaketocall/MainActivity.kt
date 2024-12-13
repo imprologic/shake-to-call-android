@@ -93,6 +93,7 @@ fun AdaptiveLayout(
                     .fillMaxHeight()
             )
             AnswerOptionsWidget(
+                settingsManager,
                 modifier = Modifier
                     .padding(PaddingValues(0.dp, 16.dp, 16.dp, 16.dp))
                     .weight(1f)
@@ -113,6 +114,7 @@ fun AdaptiveLayout(
                     .fillMaxWidth()
             )
             AnswerOptionsWidget(
+                settingsManager,
                 modifier = Modifier
                     .padding(PaddingValues(16.dp, 0.dp, 16.dp, 16.dp))
                     .weight(1f)
