@@ -28,7 +28,10 @@ fun AnswerOptionsWidget(modifier: Modifier) {
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp),
             )
-            AccessibleSwitch()
+            AccessibleSwitch(
+                initialChecked = true,
+                onCheckedChange = {}
+            )
             Button(
                 onClick = {
                     MonitoringServiceStarter.startService(context)
