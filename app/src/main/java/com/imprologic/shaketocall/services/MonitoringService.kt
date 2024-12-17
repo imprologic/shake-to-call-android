@@ -5,27 +5,41 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import kotlin.math.sqrt
 
 
-class MonitoringService : Service() {
+class MonitoringService : Service(), SensorEventListener {
 
-    val TAG = "MonitoringService"
+    val tag = "MonitoringService"
+    private var shakeThreshold = 12.0f
+
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
 
     override fun onCreate() {
         super.onCreate()
-        Log.i(TAG, "onCreate")
+        Log.i(tag, "onCreate")
         createNotificationChannel()
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
         // Initialize shake detection and telephony handling here
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        accelerometer?.also { acc ->
+            sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i(TAG, "onStartCommand")
+        Log.i(tag, "onStartCommand")
         // Handle any intent data if needed
         return START_STICKY
     }
@@ -37,13 +51,13 @@ class MonitoringService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Log.i(TAG, "onBind")
+        Log.i(tag, "onBind")
         return null
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.i(TAG, "createNotificationChannel")
+            Log.i(tag, "createNotificationChannel")
             val channel = NotificationChannel(
                 "shake_service_channel",
                 "Shake Detection Service",
@@ -55,7 +69,7 @@ class MonitoringService : Service() {
     }
 
     private fun createNotification(): Notification {
-        Log.i(TAG, "createNotification")
+        Log.i(tag, "createNotification")
         return NotificationCompat.Builder(this, "shake_service_channel")
             .setContentTitle("Shake Detection Running")
             .setContentText("Monitoring for shake events and calls")
@@ -63,6 +77,26 @@ class MonitoringService : Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .build()
+    }
+
+
+    // SensorEventListener implementation
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            val x = it.values[0]
+            val y = it.values[1]
+            val z = it.values[2]
+
+            val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            if (shakeMagnitude > shakeThreshold) {
+                Log.i(tag, "Shake detected")
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+//        TODO("Not yet implemented")
     }
 
 }
