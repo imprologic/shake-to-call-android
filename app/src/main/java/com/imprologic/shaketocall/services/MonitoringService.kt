@@ -9,7 +9,9 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -23,6 +25,9 @@ class MonitoringService : Service(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
+
+    private var shakeHandler: Handler? = Handler()
+    private var isShaking = false
 
     override fun onCreate() {
         super.onCreate()
@@ -89,14 +94,47 @@ class MonitoringService : Service(), SensorEventListener {
             val z = it.values[2]
 
             val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+
             if (shakeMagnitude > shakeThreshold) {
-                Log.i(tag, "Shake detected")
+                if (!isShaking) {
+                    Log.i(tag, "Shake detected")
+                    isShaking = true
+                }
+                shakeHandler?.removeCallbacksAndMessages(null)
+            } else if (isShaking) {
+                shakeHandler?.postDelayed({
+                    Log.i(tag, "Shake ended, calling actOnShake()")
+                    actOnShake()
+                    isShaking = false
+                }, 500)
             }
         }
     }
 
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 //        TODO("Not yet implemented")
+    }
+
+
+    // Act on shake
+
+    private fun actOnShake() {
+        // TODO: Check if a call is already in progress
+        makeCall()
+    }
+
+
+    // Make calls
+
+    private fun makeCall() {
+        val phoneToCall = SettingsManager(this).defaultPhone
+        Log.i(tag, "Will call $phoneToCall")
+        val callIntent = Intent(Intent.ACTION_CALL).apply {
+            data = Uri.parse("tel:$phoneToCall")
+        }
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(callIntent)
     }
 
 }
