@@ -1,13 +1,13 @@
 package com.imprologic.shaketocall.services
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import androidx.activity.ComponentActivity
 
 
-class SettingsManager(activity: ComponentActivity) {
+class SettingsManager(context: Context) {
 
-    val prefs: SharedPreferences = activity.getSharedPreferences("app_prefs", MODE_PRIVATE)
+    val prefs: SharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE)
 
     var shakeToCall: Boolean
         get() = prefs.getBoolean("shake_to_call", false)
