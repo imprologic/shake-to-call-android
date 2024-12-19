@@ -11,8 +11,9 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import kotlin.math.sqrt
@@ -21,13 +22,17 @@ import kotlin.math.sqrt
 class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
-    private var shakeThreshold = 12.0f
+    val shakeActionDelay = 5000L
+
+    private var shakeThreshold = 12.0f  // TODO: get this from Settings
+    private var lastActionTime  = 0L;
 
     private lateinit var sensorManager: SensorManager
+    private lateinit var telephonyManager: TelephonyManager
     private var accelerometer: Sensor? = null
 
-    private var shakeHandler: Handler? = Handler()
-    private var isShaking = false
+    private var phoneState = 0
+
 
     override fun onCreate() {
         super.onCreate()
@@ -41,6 +46,9 @@ class MonitoringService : Service(), SensorEventListener {
         accelerometer?.also { acc ->
             sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL)
         }
+        //
+        telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -96,17 +104,12 @@ class MonitoringService : Service(), SensorEventListener {
             val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
 
             if (shakeMagnitude > shakeThreshold) {
-                if (!isShaking) {
-                    Log.i(tag, "Shake detected")
-                    isShaking = true
-                }
-                shakeHandler?.removeCallbacksAndMessages(null)
-            } else if (isShaking) {
-                shakeHandler?.postDelayed({
-                    Log.i(tag, "Shake ended, calling actOnShake()")
+                Log.i(tag, "Shake detected")
+                val now = System.currentTimeMillis()
+                if (now - lastActionTime > shakeActionDelay) {
+                    lastActionTime = now
                     actOnShake()
-                    isShaking = false
-                }, 500)
+                }
             }
         }
     }
@@ -117,15 +120,30 @@ class MonitoringService : Service(), SensorEventListener {
     }
 
 
+    // Phone events listener
+
+    private val phoneStateListener = object : PhoneStateListener() {
+        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+            phoneState = state
+            Log.i(tag, "Phone state changed: $phoneState")
+        }
+    }
+
     // Act on shake
 
     private fun actOnShake() {
         // TODO: Check if a call is already in progress
-        makeCall()
+        if (phoneState == TelephonyManager.CALL_STATE_IDLE) {
+            makeCall()
+        } else if (phoneState == TelephonyManager.CALL_STATE_OFFHOOK) {
+            endCall()
+        } else if (phoneState == TelephonyManager.CALL_STATE_RINGING) {
+            answerCall()
+        }
     }
 
 
-    // Make calls
+    // Make call
 
     private fun makeCall() {
         val phoneToCall = SettingsManager(this).defaultPhone
@@ -136,5 +154,19 @@ class MonitoringService : Service(), SensorEventListener {
         callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(callIntent)
     }
+
+
+    // End call
+
+    private fun endCall() {
+        // TODO: Implement this
+    }
+
+    // Answer call
+
+    private fun answerCall() {
+        // TODO: Implement this
+    }
+
 
 }
