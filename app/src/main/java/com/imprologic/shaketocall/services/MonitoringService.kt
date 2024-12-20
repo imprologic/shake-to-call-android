@@ -1,10 +1,12 @@
 package com.imprologic.shaketocall.services
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,8 +15,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.telephony.PhoneStateListener
+import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import kotlin.math.sqrt
 
@@ -104,9 +108,9 @@ class MonitoringService : Service(), SensorEventListener {
             val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
 
             if (shakeMagnitude > shakeThreshold) {
-                Log.i(tag, "Shake detected")
                 val now = System.currentTimeMillis()
                 if (now - lastActionTime > shakeActionDelay) {
+                    Log.i(tag, "Shake detected")
                     lastActionTime = now
                     actOnShake()
                 }
@@ -132,7 +136,7 @@ class MonitoringService : Service(), SensorEventListener {
     // Act on shake
 
     private fun actOnShake() {
-        // TODO: Check if a call is already in progress
+        Log.i(tag, "Phone state is $phoneState")
         if (phoneState == TelephonyManager.CALL_STATE_IDLE) {
             makeCall()
         } else if (phoneState == TelephonyManager.CALL_STATE_OFFHOOK) {
@@ -165,7 +169,22 @@ class MonitoringService : Service(), SensorEventListener {
     // Answer call
 
     private fun answerCall() {
-        // TODO: Implement this
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Log.e(tag, "Call answering not supported for version ${Build.VERSION.SDK_INT}")
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.e(tag, "READ_PHONE_STATE permission not granted, cannot answer call")
+            return
+        }
+        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+        if (telecomManager.isInCall) {
+            telecomManager.acceptRingingCall()
+        }
     }
 
 
