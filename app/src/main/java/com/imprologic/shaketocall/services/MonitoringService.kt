@@ -1,6 +1,7 @@
 package com.imprologic.shaketocall.services
 
 import android.Manifest
+import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -29,11 +30,11 @@ class MonitoringService : Service(), SensorEventListener {
     val shakeActionDelay = 5000L
 
     private var shakeThreshold = 12.0f  // TODO: get this from Settings
-    private var lastActionTime  = 0L
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
     private var accelerometer: Sensor? = null
+    private val shakeStateMachine = ShakeStateMachine(::actOnShake)
 
     private var phoneState = 0
 
@@ -92,7 +93,7 @@ class MonitoringService : Service(), SensorEventListener {
         return NotificationCompat.Builder(this, "shake_service_channel")
             .setContentTitle("Shake Detection Running")
             .setContentText("Monitoring for shake events and calls")
-            .setSmallIcon(android.R.drawable.ic_menu_info_details)
+            .setSmallIcon(R.drawable.ic_menu_info_details)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .build()
@@ -110,12 +111,7 @@ class MonitoringService : Service(), SensorEventListener {
             val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
 
             if (shakeMagnitude > shakeThreshold) {
-                val now = System.currentTimeMillis()
-                if (now - lastActionTime > shakeActionDelay) {
-                    Log.i(tag, "Shake detected")
-                    lastActionTime = now
-                    actOnShake()
-                }
+                shakeStateMachine.handleShakeEvent()
             }
         }
     }
