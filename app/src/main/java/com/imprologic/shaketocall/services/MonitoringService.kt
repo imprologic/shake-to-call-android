@@ -163,7 +163,22 @@ class MonitoringService : Service(), SensorEventListener {
     // End call
 
     private fun endCall() {
-        // TODO: Implement this
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Log.e(tag, "Call ending not supported for version ${Build.VERSION.SDK_INT}")
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.e(tag, "READ_PHONE_STATE permission not granted, cannot answer call")
+            return
+        }
+        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+        if (telecomManager.isInCall) {
+            telecomManager.endCall()
+        }
     }
 
     // Answer call
