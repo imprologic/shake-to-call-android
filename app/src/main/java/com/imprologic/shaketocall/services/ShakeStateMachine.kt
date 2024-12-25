@@ -11,23 +11,27 @@ class ShakeStateMachine(
     val confirmInterval = 0.5 * 1000;
     val ignoreInterval = 5 * 1000
 
-    var lastEventTime = 0L
+    var lastInitiationTime = 0L
+    var waitingForConfirmation = false;
 
 
     fun handleShakeEvent() {
         val now = System.currentTimeMillis()
-        val delta = now - lastEventTime;
+        val delta = now - lastInitiationTime;
         if (delta > ignoreInterval) {
             Log.i(tag, "Shake initiated, waiting for confirmation")
-            lastEventTime = now
+            lastInitiationTime = now
+            waitingForConfirmation = true
             return
         }
         if (delta < confirmInterval) {
             return
         }
-        Log.i(tag, "Shake confirmed")
-        lastEventTime = now
-        onShakeConfirmed()
+        if (waitingForConfirmation) {
+            Log.i(tag, "Shake confirmed")
+            waitingForConfirmation = false
+            onShakeConfirmed()
+        }
     }
 
 
