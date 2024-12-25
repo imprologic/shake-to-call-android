@@ -29,7 +29,7 @@ class MonitoringService : Service(), SensorEventListener {
     val shakeActionDelay = 5000L
 
     private var shakeThreshold = 12.0f  // TODO: get this from Settings
-    private var lastActionTime  = 0L;
+    private var lastActionTime  = 0L
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
