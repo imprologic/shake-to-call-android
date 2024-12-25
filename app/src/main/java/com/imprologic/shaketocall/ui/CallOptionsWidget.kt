@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -22,9 +23,11 @@ import com.imprologic.shaketocall.services.SettingsManager
 
 @Composable
 fun CallOptionsWidget(
-    settingsManager: SettingsManager,
     modifier: Modifier
 ) {
+
+    val context = LocalContext.current
+    val settingsManager = SettingsManager(context)
 
     val textState = remember { mutableStateOf(settingsManager.defaultPhone ?: "") }
 

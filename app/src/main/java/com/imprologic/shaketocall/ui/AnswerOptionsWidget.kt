@@ -18,10 +18,10 @@ import com.imprologic.shaketocall.services.SettingsManager
 
 @Composable
 fun AnswerOptionsWidget(
-    settingsManager: SettingsManager,
     modifier: Modifier
 ) {
     val context = LocalContext.current
+    val settingsManager = SettingsManager(context)
 
     OutlinedCard(
         modifier = modifier
