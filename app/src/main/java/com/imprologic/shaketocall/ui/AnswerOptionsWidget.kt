@@ -36,15 +36,9 @@ fun AnswerOptionsWidget(
                 initialChecked = settingsManager.shakeToAnswer,
                 onCheckedChange = {
                     settingsManager.shakeToAnswer = it
+                    MonitoringServiceStarter.manageService(context)
                 }
             )
-            Button(
-                onClick = {
-                    MonitoringServiceStarter.startService(context)
-                }
-            ) {
-                Text(text = "launch service")
-            }
         }
     }
 }
