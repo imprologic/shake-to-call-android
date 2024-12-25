@@ -63,8 +63,10 @@ class MonitoringService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("ShakeService", "Service destroyed")
-        // Clean up resources
+        Log.d(tag, "Service destroyed")
+        sensorManager.unregisterListener(this)
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+        stopForeground(true)
     }
 
     override fun onBind(intent: Intent?): IBinder? {

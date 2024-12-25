@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.imprologic.shaketocall.R
+import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
 
 
@@ -44,6 +45,7 @@ fun CallOptionsWidget(
                 initialChecked = settingsManager.shakeToCall,
                 onCheckedChange = {
                     settingsManager.shakeToCall = it
+                    MonitoringServiceStarter.manageService(context)
                 }
             )
             TextField(
