@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.PermissionHelper
 import com.imprologic.shaketocall.ui.AnswerOptionsWidget
 import com.imprologic.shaketocall.ui.CallOptionsWidget
@@ -37,6 +38,7 @@ class MainActivity : ComponentActivity() {
         }
         permissionHelper = PermissionHelper(this)
         permissionHelper.registerPermissionHandler()
+        MonitoringServiceStarter.manageService(this)
     }
 
 }
