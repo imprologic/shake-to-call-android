@@ -4,8 +4,8 @@ import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -24,6 +24,7 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import com.imprologic.shaketocall.MainActivity
 import com.imprologic.shaketocall.R
 import kotlin.math.sqrt
 
@@ -97,12 +98,22 @@ class MonitoringService : Service(), SensorEventListener {
 
     private fun createNotification(): Notification {
         Log.i(tag, "createNotification")
+        // Create an Intent to open MainActivity
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        // Create a PendingIntent for the Intent
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        // Create the notification
         return NotificationCompat.Builder(this, channelName)
             .setContentTitle(this.getString(R.string.service_notification_title))
             .setContentText(this.getString(R.string.service_notification_content))
             .setSmallIcon(R.drawable.ic_stat_monitoring_service)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
+            .setContentIntent(pendingIntent)
             .build()
     }
 
@@ -234,7 +245,7 @@ class MonitoringService : Service(), SensorEventListener {
 
     private fun notifyShakeConfirmed() {
         try {
-            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val effect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
                 vibrator.vibrate(effect)
