@@ -26,6 +26,8 @@ import kotlin.math.sqrt
 import com.imprologic.shaketocall.R
 
 private const val channelName = "shake_service_channel"
+private const val secondaryChannelName = "shake_confirmation_channel"
+private const val secondaryChannelId = 2
 
 class MonitoringService : Service(), SensorEventListener {
 
@@ -45,9 +47,10 @@ class MonitoringService : Service(), SensorEventListener {
     override fun onCreate() {
         super.onCreate()
         Log.i(tag, "onCreate")
-        createNotificationChannel()
+        createMainNotificationChannel()
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
+        createSecondaryNotificationChannel()
         settingsManager = SettingsManager(this)
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -79,7 +82,7 @@ class MonitoringService : Service(), SensorEventListener {
         return null
     }
 
-    private fun createNotificationChannel() {
+    private fun createMainNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(tag, "createNotificationChannel")
             val channel = NotificationChannel(
@@ -92,12 +95,32 @@ class MonitoringService : Service(), SensorEventListener {
         }
     }
 
+
+    private fun createSecondaryNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel"
+            val descriptionText = "Channel for custom sound notifications"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(secondaryChannelName, name, importance).apply {
+                description = descriptionText
+                setSound(
+                    Uri.parse("android.resource://${packageName}/${R.raw.shake_confirmed}"),
+                    null
+                )
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
     private fun createNotification(): Notification {
         Log.i(tag, "createNotification")
         return NotificationCompat.Builder(this, channelName)
             .setContentTitle(this.getString(R.string.service_notification_title))
             .setContentText(this.getString(R.string.service_notification_content))
-            .setSmallIcon(android.R.drawable.ic_menu_info_details)
+            .setSmallIcon(R.drawable.ic_stat_monitoring_service)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .build()
@@ -166,6 +189,7 @@ class MonitoringService : Service(), SensorEventListener {
         }
         val phoneToCall = settingsManager.defaultPhone
         Log.i(tag, "Will call $phoneToCall")
+        playConfirmationSound()
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
         val uri = Uri.fromParts("tel", phoneToCall, null)
         val bundle = Bundle()
@@ -225,5 +249,21 @@ class MonitoringService : Service(), SensorEventListener {
         }
     }
 
+
+    // Play additional notification sound
+    private fun playConfirmationSound() {
+        val soundUri: Uri = Uri.parse("android.resource://${packageName}/${R.raw.shake_confirmed}")
+
+        val notification = NotificationCompat.Builder(this, secondaryChannelName)
+            .setContentTitle("Event Triggered")
+            .setContentText("Playing custom sound!")
+            .setSmallIcon(R.drawable.ic_stat_shake_confirmed)
+            .setSound(soundUri) // Set the custom sound
+            .setAutoCancel(true)
+            .build()
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(secondaryChannelId, notification) // Use a different ID to play the sound
+    }
 
 }
