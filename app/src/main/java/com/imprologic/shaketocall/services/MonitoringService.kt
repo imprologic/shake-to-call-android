@@ -1,7 +1,6 @@
 package com.imprologic.shaketocall.services
 
 import android.Manifest
-import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,9 +13,10 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
-import android.telephony.PhoneStateListener
 import android.telecom.TelecomManager
+import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -27,7 +27,6 @@ import kotlin.math.sqrt
 class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
-    val shakeActionDelay = 5000L
 
     private var shakeThreshold = 12.0f  // TODO: get this from Settings
 
@@ -93,7 +92,7 @@ class MonitoringService : Service(), SensorEventListener {
         return NotificationCompat.Builder(this, "shake_service_channel")
             .setContentTitle("Shake Detection Running")
             .setContentText("Monitoring for shake events and calls")
-            .setSmallIcon(R.drawable.ic_menu_info_details)
+            .setSmallIcon(android.R.drawable.ic_menu_info_details)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .build()
@@ -148,13 +147,21 @@ class MonitoringService : Service(), SensorEventListener {
     // Make call
 
     private fun makeCall() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.i(tag, "CALL_PHONE permission denied")
+            return
+        }
         val phoneToCall = SettingsManager(this).defaultPhone
         Log.i(tag, "Will call $phoneToCall")
-        val callIntent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:$phoneToCall")
-        }
-        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(callIntent)
+        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+        val uri = Uri.fromParts("tel", phoneToCall, null)
+        val bundle = Bundle()
+        bundle.putBoolean(TelecomManager.EXTRA_START_CALL_WITH_SPEAKERPHONE, true)
+        telecomManager.placeCall(uri, bundle)
     }
 
 
