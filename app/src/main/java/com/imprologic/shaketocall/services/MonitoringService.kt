@@ -32,6 +32,7 @@ class MonitoringService : Service(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
+    private lateinit var settingsManager: SettingsManager
     private var accelerometer: Sensor? = null
     private val shakeStateMachine = ShakeStateMachine(::actOnShake)
 
@@ -44,6 +45,7 @@ class MonitoringService : Service(), SensorEventListener {
         createNotificationChannel()
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
+        settingsManager = SettingsManager(this)
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -117,7 +119,7 @@ class MonitoringService : Service(), SensorEventListener {
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-//        TODO("Not yet implemented")
+        // Not needed
     }
 
 
@@ -147,6 +149,10 @@ class MonitoringService : Service(), SensorEventListener {
     // Make call
 
     private fun makeCall() {
+        if (!settingsManager.shakeToCall) {
+            Log.i(tag, "shakeToCall option is disabled")
+            return
+        }
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CALL_PHONE
@@ -155,7 +161,7 @@ class MonitoringService : Service(), SensorEventListener {
             Log.i(tag, "CALL_PHONE permission denied")
             return
         }
-        val phoneToCall = SettingsManager(this).defaultPhone
+        val phoneToCall = settingsManager.defaultPhone
         Log.i(tag, "Will call $phoneToCall")
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
         val uri = Uri.fromParts("tel", phoneToCall, null)
@@ -168,6 +174,11 @@ class MonitoringService : Service(), SensorEventListener {
     // End call
 
     private fun endCall() {
+        if (!settingsManager.shakeToAnswer) {
+            // TODO: Should we have a different setting here?
+            Log.i(tag, "shakeToAnswer option is disabled")
+            return
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             Log.e(tag, "Call ending not supported for version ${Build.VERSION.SDK_INT}")
             return
@@ -189,6 +200,10 @@ class MonitoringService : Service(), SensorEventListener {
     // Answer call
 
     private fun answerCall() {
+        if (!settingsManager.shakeToAnswer) {
+            Log.i(tag, "shakeToAnswer option is disabled")
+            return
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Log.e(tag, "Call answering not supported for version ${Build.VERSION.SDK_INT}")
             return
