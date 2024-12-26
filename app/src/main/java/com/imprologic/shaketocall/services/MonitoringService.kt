@@ -13,9 +13,10 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
-import android.telephony.PhoneStateListener
 import android.telecom.TelecomManager
+import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -26,14 +27,14 @@ import kotlin.math.sqrt
 class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
-    val shakeActionDelay = 5000L
 
     private var shakeThreshold = 12.0f  // TODO: get this from Settings
-    private var lastActionTime  = 0L
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
+    private lateinit var settingsManager: SettingsManager
     private var accelerometer: Sensor? = null
+    private val shakeStateMachine = ShakeStateMachine(::actOnShake)
 
     private var phoneState = 0
 
@@ -44,6 +45,7 @@ class MonitoringService : Service(), SensorEventListener {
         createNotificationChannel()
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
+        settingsManager = SettingsManager(this)
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -110,19 +112,14 @@ class MonitoringService : Service(), SensorEventListener {
             val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
 
             if (shakeMagnitude > shakeThreshold) {
-                val now = System.currentTimeMillis()
-                if (now - lastActionTime > shakeActionDelay) {
-                    Log.i(tag, "Shake detected")
-                    lastActionTime = now
-                    actOnShake()
-                }
+                shakeStateMachine.handleShakeEvent()
             }
         }
     }
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-//        TODO("Not yet implemented")
+        // Not needed
     }
 
 
@@ -152,19 +149,36 @@ class MonitoringService : Service(), SensorEventListener {
     // Make call
 
     private fun makeCall() {
-        val phoneToCall = SettingsManager(this).defaultPhone
-        Log.i(tag, "Will call $phoneToCall")
-        val callIntent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:$phoneToCall")
+        if (!settingsManager.shakeToCall) {
+            Log.i(tag, "shakeToCall option is disabled")
+            return
         }
-        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(callIntent)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.i(tag, "CALL_PHONE permission denied")
+            return
+        }
+        val phoneToCall = settingsManager.defaultPhone
+        Log.i(tag, "Will call $phoneToCall")
+        val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+        val uri = Uri.fromParts("tel", phoneToCall, null)
+        val bundle = Bundle()
+        bundle.putBoolean(TelecomManager.EXTRA_START_CALL_WITH_SPEAKERPHONE, true)
+        telecomManager.placeCall(uri, bundle)
     }
 
 
     // End call
 
     private fun endCall() {
+        if (!settingsManager.shakeToAnswer) {
+            // TODO: Should we have a different setting here?
+            Log.i(tag, "shakeToAnswer option is disabled")
+            return
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             Log.e(tag, "Call ending not supported for version ${Build.VERSION.SDK_INT}")
             return
@@ -186,6 +200,10 @@ class MonitoringService : Service(), SensorEventListener {
     // Answer call
 
     private fun answerCall() {
+        if (!settingsManager.shakeToAnswer) {
+            Log.i(tag, "shakeToAnswer option is disabled")
+            return
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Log.e(tag, "Call answering not supported for version ${Build.VERSION.SDK_INT}")
             return
