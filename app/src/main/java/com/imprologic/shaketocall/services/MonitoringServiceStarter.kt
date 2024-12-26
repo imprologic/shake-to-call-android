@@ -42,6 +42,9 @@ class MonitoringServiceStarter {
         }
 
 
+        /**
+         * Start or stop service depending on settings
+         */
         fun manageService(context: Context) {
             val settingsManager = SettingsManager(context)
             val shouldRun = settingsManager.shakeToCall || settingsManager.shakeToAnswer
@@ -58,6 +61,14 @@ class MonitoringServiceStarter {
         }
 
 
+        /**
+         * Useful when some advanced settings, which are only read on
+         * service start, are modified
+         */
+        fun restartService(context: Context) {
+            stopService(context)
+            manageService(context)
+        }
 
     }
 }
