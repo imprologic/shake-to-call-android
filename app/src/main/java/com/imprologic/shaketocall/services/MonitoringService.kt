@@ -23,6 +23,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import kotlin.math.sqrt
 
+import com.imprologic.shaketocall.R
+
+private const val channelName = "shake_service_channel"
 
 class MonitoringService : Service(), SensorEventListener {
 
@@ -80,7 +83,7 @@ class MonitoringService : Service(), SensorEventListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(tag, "createNotificationChannel")
             val channel = NotificationChannel(
-                "shake_service_channel",
+                channelName,
                 "Shake Detection Service",
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -91,9 +94,9 @@ class MonitoringService : Service(), SensorEventListener {
 
     private fun createNotification(): Notification {
         Log.i(tag, "createNotification")
-        return NotificationCompat.Builder(this, "shake_service_channel")
-            .setContentTitle("Shake Detection Running")
-            .setContentText("Monitoring for shake events and calls")
+        return NotificationCompat.Builder(this, channelName)
+            .setContentTitle(this.getString(R.string.service_notification_title))
+            .setContentText(this.getString(R.string.service_notification_content))
             .setSmallIcon(android.R.drawable.ic_menu_info_details)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)

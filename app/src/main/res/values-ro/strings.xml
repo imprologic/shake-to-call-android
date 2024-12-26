@@ -6,4 +6,6 @@
     <string name="label_on">PORNIT</string>
     <string name="label_off">OPRIT</string>
     <string name="label_number_to_call">Număr apelat</string>
+    <string name="service_notification_title">Detector scuturare pornit</string>
+    <string name="service_notification_content">Scuturarea și apelurile sunt monitorizate</string>
 </resources>

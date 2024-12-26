@@ -5,4 +5,6 @@
     <string name="label_on">ON</string>
     <string name="label_off">OFF</string>
     <string name="label_number_to_call">Number to call</string>
+    <string name="service_notification_title">Shake Detection Running</string>
+    <string name="service_notification_content">Monitoring for shake events and calls</string>
 </resources>
