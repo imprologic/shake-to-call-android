@@ -40,7 +40,7 @@ fun PhonePreference(
     value: String?,
     onValueChange: (String?) -> Unit
 ) {
-    val subtitleState = remember { mutableStateOf(subtitle) }
+    val valueState = remember { mutableStateOf(value) }
     val dialogState = remember { mutableStateOf(false) }
 
     Row(
@@ -61,7 +61,7 @@ fun PhonePreference(
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = subtitleState.value,
+                text = valueState.value ?: subtitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -79,11 +79,12 @@ fun PhonePreference(
         when {
             dialogState.value ->
                 AlertDialogExample(
-                    value = value,
+                    value = valueState.value,
                     onDismissRequest = { dialogState.value = false },
-                    onConfirmation = { result ->
+                    onConfirmation = {
                         dialogState.value = false
-                        onValueChange(result)
+                        valueState.value = it
+                        onValueChange(it)
                     }
                 )
         }
@@ -133,13 +134,13 @@ fun AlertDialogExample(
                         onClick = { onDismissRequest() },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Dismiss")
+                        Text(stringResource(android.R.string.cancel))
                     }
                     TextButton(
                         onClick = { onConfirmation( resultState.value ) },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Confirm")
+                        Text(stringResource(android.R.string.ok))
                     }
                 }
             }

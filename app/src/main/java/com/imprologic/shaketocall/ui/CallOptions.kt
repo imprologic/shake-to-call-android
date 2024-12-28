@@ -3,6 +3,8 @@ package com.imprologic.shaketocall.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -18,6 +20,7 @@ fun CallOptions() {
 
     val context = LocalContext.current
     val settingsManager = SettingsManager(context)
+    val defaultPhoneState = remember { mutableStateOf(settingsManager.defaultPhone) }
 
     Column(
         modifier = Modifier
@@ -34,10 +37,11 @@ fun CallOptions() {
         )
         PhonePreference(
             title = stringResource(R.string.label_number_to_call),
-            subtitle = settingsManager.defaultPhone
+            subtitle = defaultPhoneState.value
                 ?: stringResource(R.string.description_number_to_call),
-            value = settingsManager.defaultPhone,
+            value = defaultPhoneState.value,
             onValueChange = {
+                defaultPhoneState.value = it
                 settingsManager.defaultPhone = it
             }
         )
