@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,14 +16,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.telecom.TelecomManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import com.imprologic.shaketocall.MainActivity
+import com.imprologic.shaketocall.R
 import kotlin.math.sqrt
 
+private const val channelName = "shake_service_channel"
 
 class MonitoringService : Service(), SensorEventListener {
 
@@ -42,7 +48,7 @@ class MonitoringService : Service(), SensorEventListener {
     override fun onCreate() {
         super.onCreate()
         Log.i(tag, "onCreate")
-        createNotificationChannel()
+        createMainNotificationChannel()
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
         settingsManager = SettingsManager(this)
@@ -76,11 +82,11 @@ class MonitoringService : Service(), SensorEventListener {
         return null
     }
 
-    private fun createNotificationChannel() {
+    private fun createMainNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(tag, "createNotificationChannel")
             val channel = NotificationChannel(
-                "shake_service_channel",
+                channelName,
                 "Shake Detection Service",
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -89,14 +95,25 @@ class MonitoringService : Service(), SensorEventListener {
         }
     }
 
+
     private fun createNotification(): Notification {
         Log.i(tag, "createNotification")
-        return NotificationCompat.Builder(this, "shake_service_channel")
-            .setContentTitle("Shake Detection Running")
-            .setContentText("Monitoring for shake events and calls")
-            .setSmallIcon(android.R.drawable.ic_menu_info_details)
+        // Create an Intent to open MainActivity
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        // Create a PendingIntent for the Intent
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        // Create the notification
+        return NotificationCompat.Builder(this, channelName)
+            .setContentTitle(this.getString(R.string.service_notification_title))
+            .setContentText(this.getString(R.string.service_notification_content))
+            .setSmallIcon(R.drawable.ic_stat_monitoring_service)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
+            .setContentIntent(pendingIntent)
             .build()
     }
 
@@ -163,6 +180,7 @@ class MonitoringService : Service(), SensorEventListener {
         }
         val phoneToCall = settingsManager.defaultPhone
         Log.i(tag, "Will call $phoneToCall")
+        notifyShakeConfirmed()
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
         val uri = Uri.fromParts("tel", phoneToCall, null)
         val bundle = Bundle()
@@ -191,6 +209,7 @@ class MonitoringService : Service(), SensorEventListener {
             Log.e(tag, "READ_PHONE_STATE permission not granted, cannot answer call")
             return
         }
+        notifyShakeConfirmed()
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
         if (telecomManager.isInCall) {
             telecomManager.endCall()
@@ -216,11 +235,27 @@ class MonitoringService : Service(), SensorEventListener {
             Log.e(tag, "READ_PHONE_STATE permission not granted, cannot answer call")
             return
         }
+        notifyShakeConfirmed()
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
         if (telecomManager.isInCall) {
             telecomManager.acceptRingingCall()
         }
     }
 
+
+    private fun notifyShakeConfirmed() {
+        try {
+            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val effect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(effect)
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(500)
+            }
+        } catch (e: Error) {
+           Log.w(tag, "Unable to vibrate", e)
+        }
+    }
 
 }
