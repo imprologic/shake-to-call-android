@@ -34,8 +34,12 @@ fun CallOptions() {
         )
         PhonePreference(
             title = stringResource(R.string.label_number_to_call),
-            value = settingsManager.defaultPhone ?: stringResource(R.string.description_number_to_call),
-            onValueChange = {}
+            subtitle = settingsManager.defaultPhone
+                ?: stringResource(R.string.description_number_to_call),
+            value = settingsManager.defaultPhone,
+            onValueChange = {
+                settingsManager.defaultPhone = it
+            }
         )
     }
 }
