@@ -9,6 +9,8 @@
     <string name="alert_number_to_call">Enter the number to call</string>
 
     <string name="shake_to_answer">Shake to Answer</string>
+    <string name="shake_to_answer_description">Tap on the switch to the right to activate / deactivate</string>
+
     <string name="label_on">ON</string>
     <string name="label_off">OFF</string>
     <string name="service_notification_title">Shake Detection Running</string>
