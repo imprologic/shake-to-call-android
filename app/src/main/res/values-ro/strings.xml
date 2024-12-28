@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Scutură pentru a suna / răspunde</string>
+    <string name="shake_to_call_description">"Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune"</string>
     <string name="shake_to_answer">Scutură pentru a răspunde</string>
     <string name="shake_to_call">Scutură pentru a apela</string>
     <string name="label_on">PORNIT</string>
