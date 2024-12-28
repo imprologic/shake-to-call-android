@@ -22,10 +22,7 @@ fun CallOptions() {
     val settingsManager = SettingsManager(context)
     val defaultPhoneState = remember { mutableStateOf(settingsManager.defaultPhone) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Column() {
         SwitchPreference(
             title = stringResource(R.string.shake_to_call),
             subtitle = stringResource(R.string.shake_to_call_description),
