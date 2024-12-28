@@ -4,10 +4,12 @@
     <string name="shake_to_call">Shake to Call</string>
     <string name="shake_to_call_description">Tap on the switch to the right to activate / deactivate</string>
 
+    <string name="label_number_to_call">Number to call</string>
+    <string name="description_number_to_call">Tap here to enter the default number, or the icon to the right to pick from Contacts</string>
+
     <string name="shake_to_answer">Shake to Answer</string>
     <string name="label_on">ON</string>
     <string name="label_off">OFF</string>
-    <string name="label_number_to_call">Number to call</string>
     <string name="service_notification_title">Shake Detection Running</string>
     <string name="service_notification_content">Monitoring for shake events and calls</string>
 </resources>
