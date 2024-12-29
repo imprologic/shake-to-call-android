@@ -1,11 +1,9 @@
 package com.imprologic.shaketocall.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.R
@@ -20,14 +18,16 @@ fun CallOptions() {
 
     val context = LocalContext.current
     val settingsManager = SettingsManager(context)
+    val shakeToCallState = remember { mutableStateOf(settingsManager.shakeToCall) }
     val defaultPhoneState = remember { mutableStateOf(settingsManager.defaultPhone) }
 
     Column() {
         SwitchPreference(
             title = stringResource(R.string.shake_to_call),
             subtitle = stringResource(R.string.shake_to_call_description),
-            value = settingsManager.shakeToCall,
+            value = shakeToCallState.value,
             onValueChange = {
+                shakeToCallState.value = it
                 settingsManager.shakeToCall = it
                 MonitoringServiceStarter.manageService(context)
             }
