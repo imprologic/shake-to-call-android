@@ -19,10 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.PermissionHelper
-import com.imprologic.shaketocall.ui.AccessibleSwitch
 import com.imprologic.shaketocall.ui.AnswerOptions
 import com.imprologic.shaketocall.ui.CallOptions
-import com.imprologic.shaketocall.ui.widgets.SwitchPreference
+import com.imprologic.shaketocall.ui.theme.MainTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScaffoldContainer()
+            AppContent()
         }
         permissionHelper = PermissionHelper(this)
         permissionHelper.registerPermissionHandler()
@@ -43,29 +42,31 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldContainer(
+fun AppContent(
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(text = stringResource(id = R.string.app_name))
-                }
-            )
-        },
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            CallOptions()
-            AnswerOptions()
+    MainTheme {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+//                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    title = {
+                        Text(text = stringResource(id = R.string.app_name))
+                    }
+                )
+            },
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                CallOptions()
+                AnswerOptions()
+            }
         }
     }
 }
