@@ -49,7 +49,7 @@ fun AppContent(
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.tertiary,
 //                        titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
                     title = {
