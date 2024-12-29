@@ -40,7 +40,6 @@ fun PhonePreference(
     value: String?,
     onValueChange: (String?) -> Unit
 ) {
-    val valueState = remember { mutableStateOf(value) }
     val dialogState = remember { mutableStateOf(false) }
 
     Row(
@@ -61,7 +60,7 @@ fun PhonePreference(
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = valueState.value ?: subtitle,
+                text = value ?: subtitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -78,12 +77,11 @@ fun PhonePreference(
         }
         when {
             dialogState.value ->
-                AlertDialogExample(
-                    value = valueState.value,
+                PhoneEntryDialog(
+                    value = value,
                     onDismissRequest = { dialogState.value = false },
                     onConfirmation = {
                         dialogState.value = false
-                        valueState.value = it
                         onValueChange(it)
                     }
                 )
@@ -93,8 +91,9 @@ fun PhonePreference(
 }
 
 
+// TODO: Move this to a separate file and generalize the Preference Widget
 @Composable
-fun AlertDialogExample(
+fun PhoneEntryDialog(
     value: String?,
     onDismissRequest: () -> Unit,
     onConfirmation: (result: String?) -> Unit,
