@@ -192,9 +192,9 @@ class MonitoringService : Service(), SensorEventListener {
     // End call
 
     private fun endCall() {
-        if (!settingsManager.shakeToAnswer) {
+        if (!settingsManager.shakeToHangUp) {
             // TODO: Should we have a different setting here?
-            Log.i(tag, "shakeToAnswer option is disabled")
+            Log.i(tag, "shakeToHangUp option is disabled")
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {

@@ -27,4 +27,10 @@ class SettingsManager(context: Context) {
             prefs.edit().putBoolean("shake_to_answer", value).apply()
         }
 
+    var shakeToHangUp: Boolean
+        get() = prefs.getBoolean("shake_to_hang_up", false)
+        set(value) {
+            prefs.edit().putBoolean("shake_to_hang_up", value).apply()
+        }
+
 }
