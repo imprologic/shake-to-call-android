@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 
 class SettingsManager(context: Context) {
 
+    val defaultShakeMagnitude = 12.0f
     val prefs: SharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE)
 
     var shakeToCall: Boolean
@@ -31,6 +32,12 @@ class SettingsManager(context: Context) {
         get() = prefs.getBoolean("shake_to_hang_up", false)
         set(value) {
             prefs.edit().putBoolean("shake_to_hang_up", value).apply()
+        }
+
+    var shakeMagnitude: Float
+        get() = prefs.getFloat("shake_magnitude", defaultShakeMagnitude)
+        set(value) {
+            prefs.edit().putFloat("shake_magnitude", value).apply()
         }
 
 }
