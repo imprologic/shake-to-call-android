@@ -20,4 +20,7 @@
     <string name="service_notification_content">Scuturarea și apelurile sunt monitorizate</string>
     <string name="incoming_call_options">Opțiuni apelare</string>
     <string name="outgoing_call_options">Opțiuni răspuns</string>
+    <string name="advanced_options">Opțiuni avansate</string>
+    <string name="shake_magnitude">Shake magnitude</string>
+    <string name="shake_metric">m/s2</string>
 </resources>

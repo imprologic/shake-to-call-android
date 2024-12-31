@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.PermissionHelper
+import com.imprologic.shaketocall.ui.AdvancedOptions
 import com.imprologic.shaketocall.ui.AnswerOptions
 import com.imprologic.shaketocall.ui.CallOptions
 import com.imprologic.shaketocall.ui.theme.MainTheme
@@ -66,6 +67,7 @@ fun AppContent(
             ) {
                 CallOptions()
                 AnswerOptions()
+                AdvancedOptions()
             }
         }
     }

@@ -20,4 +20,7 @@
     <string name="service_notification_content">Monitoring for shake events and calls</string>
     <string name="incoming_call_options">Incoming call options</string>
     <string name="outgoing_call_options">Outgoing call options</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="shake_magnitude">Shake magnitude</string>
+    <string name="shake_metric">m/s2</string>
 </resources>

@@ -34,7 +34,7 @@ class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
 
-    private var shakeThreshold = 12.0f  // TODO: get this from Settings
+    private var shakeThreshold = 12.0f
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
@@ -52,6 +52,7 @@ class MonitoringService : Service(), SensorEventListener {
         startForeground(1, createNotification())
         Log.d("ShakeService", "Service started")
         settingsManager = SettingsManager(this)
+        shakeThreshold = settingsManager.shakeMagnitude
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
