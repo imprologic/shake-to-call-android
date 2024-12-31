@@ -18,4 +18,6 @@
     <string name="label_off">OPRIT</string>
     <string name="service_notification_title">Detector scuturare pornit</string>
     <string name="service_notification_content">Scuturarea și apelurile sunt monitorizate</string>
+    <string name="incoming_call_options">Opțiuni apelare</string>
+    <string name="outgoing_call_options">Opțiuni răspuns</string>
 </resources>

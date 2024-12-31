@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
+import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
 
 
@@ -19,7 +20,9 @@ fun AnswerOptions() {
     val shakeToAnswerState = remember { mutableStateOf(settingsManager.shakeToAnswer) }
     val shakeToHangUpState = remember { mutableStateOf(settingsManager.shakeToHangUp) }
 
-    Column() {
+    PreferenceSection(
+        title = stringResource(R.string.outgoing_call_options),
+    ) {
         SwitchPreference (
             title = stringResource(R.string.shake_to_answer),
             subtitle = stringResource(R.string.shake_to_answer_description),
