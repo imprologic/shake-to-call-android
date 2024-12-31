@@ -18,4 +18,6 @@
     <string name="label_off">OFF</string>
     <string name="service_notification_title">Shake Detection Running</string>
     <string name="service_notification_content">Monitoring for shake events and calls</string>
+    <string name="incoming_call_options">Incoming call options</string>
+    <string name="outgoing_call_options">Outgoing call options</string>
 </resources>

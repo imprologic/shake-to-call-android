@@ -10,6 +10,7 @@ import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
 import com.imprologic.shaketocall.ui.widgets.PhonePreference
+import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
 
 
@@ -21,7 +22,9 @@ fun CallOptions() {
     val shakeToCallState = remember { mutableStateOf(settingsManager.shakeToCall) }
     val defaultPhoneState = remember { mutableStateOf(settingsManager.defaultPhone) }
 
-    Column() {
+    PreferenceSection(
+        title = stringResource(R.string.incoming_call_options)
+    ) {
         SwitchPreference(
             title = stringResource(R.string.shake_to_call),
             subtitle = stringResource(R.string.shake_to_call_description),
