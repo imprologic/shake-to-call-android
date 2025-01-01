@@ -10,7 +10,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
-import com.imprologic.shaketocall.ui.widgets.DialogPreference
+import com.imprologic.shaketocall.ui.widgets.DialogEntryPreference
 import com.imprologic.shaketocall.ui.widgets.PhonePicker
 import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
@@ -38,7 +38,7 @@ fun CallOptions() {
                 MonitoringServiceStarter.manageService(context)
             }
         )
-        DialogPreference(
+        DialogEntryPreference(
             title = stringResource(R.string.label_number_to_call),
             subtitle = defaultPhoneState.value
                 ?: stringResource(R.string.description_number_to_call),

@@ -34,7 +34,8 @@ class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
 
-    private var shakeThreshold = 12.0f
+    private var shakeThreshold = SettingsManager.DEFAULT_SHAKE_MAGNITUDE
+    private var zAxisFactor = SettingsManager.DEFAULT_Z_AXIS_FACTOR
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
@@ -53,6 +54,7 @@ class MonitoringService : Service(), SensorEventListener {
         Log.d(tag, "Service started")
         settingsManager = SettingsManager(this)
         shakeThreshold = settingsManager.shakeMagnitude
+        zAxisFactor = settingsManager.zAxisFactor
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -127,7 +129,7 @@ class MonitoringService : Service(), SensorEventListener {
             val y = it.values[1]
             val z = it.values[2]
 
-            val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            val shakeMagnitude = sqrt(x * x + y * y + zAxisFactor * z * z)
 
             if (shakeMagnitude > shakeThreshold) {
                 shakeStateMachine.handleShakeEvent()

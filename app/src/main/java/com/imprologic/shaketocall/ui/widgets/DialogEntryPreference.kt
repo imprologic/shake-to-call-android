@@ -25,7 +25,7 @@ import androidx.compose.ui.window.Dialog
 
 
 @Composable
-fun DialogPreference(
+fun DialogEntryPreference(
     title: String,
     subtitle: String,
     dialogTitle: String,
