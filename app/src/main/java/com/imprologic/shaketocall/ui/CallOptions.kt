@@ -1,10 +1,13 @@
 package com.imprologic.shaketocall.ui
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
@@ -46,6 +49,7 @@ fun CallOptions() {
                 defaultPhoneState.value = it
                 settingsManager.defaultPhone = it
             },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             sideContent = {
                 PhonePicker(
                     onPhoneNumberPicked = {
@@ -53,7 +57,7 @@ fun CallOptions() {
                         settingsManager.defaultPhone = it
                     }
                 )
-            }
+            },
         )
     }
 }

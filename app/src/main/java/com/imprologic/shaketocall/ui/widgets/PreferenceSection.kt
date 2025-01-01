@@ -23,7 +23,7 @@ fun PreferenceSection(
             Text(
                 text = title.uppercase(),
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
