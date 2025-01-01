@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardOptions.Companion
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ fun DialogPreference(
     dialogTitle: String,
     value: String?,
     onValueChange: (String?) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     sideContent: (@Composable () -> Unit)?
 ) {
     val dialogState = remember { mutableStateOf(false) }
@@ -68,6 +70,7 @@ fun DialogPreference(
                 GenericDialog(
                     title = dialogTitle,
                     value = value,
+                    keyboardOptions = keyboardOptions,
                     onDismissRequest = {
                         dialogState.value = false
                     },
@@ -86,6 +89,7 @@ fun DialogPreference(
 fun GenericDialog(
     title: String,
     value: String?,
+    keyboardOptions: KeyboardOptions,
     onDismissRequest: () -> Unit,
     onConfirmation: (result: String?) -> Unit,
 ) {
@@ -111,7 +115,7 @@ fun GenericDialog(
                     onValueChange = {
                         resultState.value = it
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    keyboardOptions = keyboardOptions,
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
