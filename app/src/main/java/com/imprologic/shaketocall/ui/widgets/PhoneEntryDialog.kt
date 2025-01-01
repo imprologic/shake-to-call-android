@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -18,10 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-
 import com.imprologic.shaketocall.R
 
 
@@ -39,6 +39,10 @@ fun PhoneEntryDialog(
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            )
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -47,15 +51,17 @@ fun PhoneEntryDialog(
                 Text(
                     text = stringResource(R.string.alert_number_to_call),
                     modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 TextField(
                     value = resultState.value ?: "",
                     onValueChange = {
                         resultState.value = it
                     },
-                    keyboardOptions = KeyboardOptions(),
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    textStyle = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Row(
