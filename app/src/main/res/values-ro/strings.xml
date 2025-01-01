@@ -6,7 +6,7 @@
     <string name="shake_to_call">Scutură pentru a apela</string>
     <string name="shake_to_call_description">"Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune"</string>
     <string name="description_number_to_call">Apăsați aici pentru a introduce un numar, sau pe simbolul din dreapta pentru a alege un contact</string>
-    <string name="alert_number_to_call">Introduceti numarul mai jos</string>
+    <string name="alert_number_to_call">Introduceți numărul mai jos</string>
     <string name="label_number_to_call">Număr apelat</string>
 
     <string name="outgoing_call_options">Opțiuni răspuns</string>

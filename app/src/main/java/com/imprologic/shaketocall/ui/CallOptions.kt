@@ -10,6 +10,7 @@ import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
 import com.imprologic.shaketocall.ui.widgets.DialogPreference
 import com.imprologic.shaketocall.ui.widgets.PhoneEntryDialog
+import com.imprologic.shaketocall.ui.widgets.PhonePicker
 import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
 
@@ -51,15 +52,15 @@ fun CallOptions() {
                     },
                     onCancel = { onDismissRequest() },
                 )
-            }
-//            sideContent = {
-//                PhonePicker(
-//                    onPhoneNumberPicked = {
-//                        defaultPhoneState.value = it
-//                        settingsManager.defaultPhone = it
-//                    }
-//                )
-//            },
+            },
+            sideContent = {
+                PhonePicker(
+                    onPhoneNumberPicked = {
+                        defaultPhoneState.value = it
+                        settingsManager.defaultPhone = it
+                    }
+                )
+            },
         )
     }
 }
