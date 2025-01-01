@@ -37,6 +37,7 @@ fun SliderPreference(
     metric: String,
     value: Float,
     valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int = 0,
     onValueChange: (Float) -> Unit
 ) {
     val dialogState = remember { mutableStateOf(false) }
@@ -70,6 +71,7 @@ fun SliderPreference(
                     title,
                     value,
                     valueRange,
+                    steps = steps,
                     onDismissRequest = { dialogState.value = false },
                     onConfirmation = {
                         dialogState.value = false
@@ -82,12 +84,12 @@ fun SliderPreference(
 }
 
 
-// TODO: Move this to a separate file and generalize thia Preference Widget
 @Composable
 fun SliderDialog(
     title: String,
     value: Float,
     valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int = 0,
     onDismissRequest: () -> Unit,
     onConfirmation: (result: Float) -> Unit,
 ) {
@@ -108,9 +110,15 @@ fun SliderDialog(
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.titleMedium,
                 )
+                Text(
+                    text = "${resultState.floatValue}",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
                 Slider(
                     value = resultState.floatValue,
                     valueRange = valueRange,
+                    steps = steps,
                     onValueChange = { resultState.floatValue = it },
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )

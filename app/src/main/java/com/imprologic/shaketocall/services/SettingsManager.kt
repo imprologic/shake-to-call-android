@@ -7,7 +7,12 @@ import android.content.SharedPreferences
 
 class SettingsManager(context: Context) {
 
-    val defaultShakeMagnitude = 12.0f
+    companion object {
+        const val DEFAULT_SHAKE_MAGNITUDE = 12.0f
+        const val DEFAULT_Z_AXIS_FACTOR = 0.75f
+    }
+
+
     val prefs: SharedPreferences = context.getSharedPreferences("app_prefs", MODE_PRIVATE)
 
     var shakeToCall: Boolean
@@ -35,9 +40,15 @@ class SettingsManager(context: Context) {
         }
 
     var shakeMagnitude: Float
-        get() = prefs.getFloat("shake_magnitude", defaultShakeMagnitude)
+        get() = prefs.getFloat("shake_magnitude", DEFAULT_SHAKE_MAGNITUDE)
         set(value) {
             prefs.edit().putFloat("shake_magnitude", value).apply()
+        }
+
+    var zAxisFactor: Float
+        get() = prefs.getFloat("z_axis_factor", DEFAULT_Z_AXIS_FACTOR)
+        set(value) {
+            prefs.edit().putFloat("z_axis_factor", value).apply()
         }
 
 }
