@@ -51,4 +51,10 @@ class SettingsManager(context: Context) {
             prefs.edit().putFloat("z_axis_factor", value).apply()
         }
 
+
+    fun resetAdvancedPreferences() {
+        shakeMagnitude = DEFAULT_SHAKE_MAGNITUDE
+        zAxisFactor = DEFAULT_Z_AXIS_FACTOR
+    }
+
 }
