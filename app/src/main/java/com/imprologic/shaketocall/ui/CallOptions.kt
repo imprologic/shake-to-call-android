@@ -46,7 +46,6 @@ fun CallOptions() {
             }
         ) {
             PhonePicker(
-                value = defaultPhoneState.value,
                 onPhoneNumberPicked = {
                     defaultPhoneState.value = it
                     settingsManager.defaultPhone = it

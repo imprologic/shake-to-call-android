@@ -23,7 +23,6 @@ import androidx.core.content.ContextCompat
 
 @Composable
 fun PhonePicker(
-    value: String?,
     onPhoneNumberPicked: (String) -> Unit
 ) {
     val context = LocalContext.current
