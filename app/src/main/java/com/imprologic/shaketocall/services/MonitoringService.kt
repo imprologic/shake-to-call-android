@@ -50,7 +50,7 @@ class MonitoringService : Service(), SensorEventListener {
         Log.i(tag, "onCreate")
         createMainNotificationChannel()
         startForeground(1, createNotification())
-        Log.d("ShakeService", "Service started")
+        Log.d(tag, "Service started")
         settingsManager = SettingsManager(this)
         shakeThreshold = settingsManager.shakeMagnitude
         // Initialize shake detection and telephony handling here
