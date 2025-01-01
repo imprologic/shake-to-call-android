@@ -1,6 +1,5 @@
 package com.imprologic.shaketocall.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
+import com.imprologic.shaketocall.ui.widgets.PhonePicker
 import com.imprologic.shaketocall.ui.widgets.PhonePreference
 import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
@@ -44,6 +44,14 @@ fun CallOptions() {
                 defaultPhoneState.value = it
                 settingsManager.defaultPhone = it
             }
-        )
+        ) {
+            PhonePicker(
+                value = defaultPhoneState.value,
+                onPhoneNumberPicked = {
+                    defaultPhoneState.value = it
+                    settingsManager.defaultPhone = it
+                }
+            )
+        }
     }
 }

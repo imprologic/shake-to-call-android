@@ -4,18 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,7 +31,8 @@ fun PhonePreference(
     title: String,
     subtitle: String,
     value: String?,
-    onValueChange: (String?) -> Unit
+    onValueChange: (String?) -> Unit,
+    sideContent: @Composable () -> Unit
 ) {
     val dialogState = remember { mutableStateOf(false) }
 
@@ -65,16 +59,7 @@ fun PhonePreference(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        IconButton(
-            onClick = { },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Person,
-                contentDescription = null,
-                modifier = Modifier.size(72.dp)
-            )
-        }
+        sideContent()
         when {
             dialogState.value ->
                 PhoneEntryDialog(
