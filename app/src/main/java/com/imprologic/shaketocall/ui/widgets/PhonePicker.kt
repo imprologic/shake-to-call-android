@@ -24,11 +24,10 @@ import androidx.core.content.ContextCompat
 @Composable
 fun PhonePicker(
     value: String?,
-    onPhoneNumberPicked: (String?) -> Unit
+    onPhoneNumberPicked: (String) -> Unit
 ) {
     val context = LocalContext.current
     val permissionState = remember { mutableStateOf(false) }
-    val phoneNumber = remember { mutableStateOf<String?>(value) }
 
     // Check initial permission state
     LaunchedEffect(Unit) {
@@ -62,7 +61,10 @@ fun PhonePicker(
                 )?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                        phoneNumber.value = cursor.getString(numberIndex)
+                        val phoneNumber = cursor.getString(numberIndex)
+                        if (phoneNumber != null) {
+                            onPhoneNumberPicked(phoneNumber)
+                        }
                     }
                 }
             }
@@ -87,10 +89,4 @@ fun PhonePicker(
         )
     }
 
-    // Notify the caller with the picked phone number
-    LaunchedEffect(phoneNumber.value) {
-        if (phoneNumber.value != null) {
-            onPhoneNumberPicked(phoneNumber.value)
-        }
-    }
 }
