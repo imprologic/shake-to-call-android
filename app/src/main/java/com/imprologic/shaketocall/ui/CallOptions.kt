@@ -1,6 +1,5 @@
 package com.imprologic.shaketocall.ui
 
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -11,8 +10,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
-import com.imprologic.shaketocall.ui.widgets.PhonePicker
 import com.imprologic.shaketocall.ui.widgets.DialogPreference
+import com.imprologic.shaketocall.ui.widgets.PhonePicker
 import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SwitchPreference
 
