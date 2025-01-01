@@ -3,8 +3,6 @@ package com.imprologic.shaketocall.ui.widgets
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -15,12 +13,10 @@ fun SwitchPreference(
     value: Boolean,
     onValueChange: (Boolean) -> Unit
 ) {
-    val state = remember { mutableStateOf(value) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp),
+            .padding(vertical = 8.dp, horizontal = 0.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
@@ -40,9 +36,8 @@ fun SwitchPreference(
         }
         Spacer(modifier = Modifier.width(8.dp))
         Switch(
-            checked = state.value,
+            checked = value,
             onCheckedChange = {
-                state.value = it
                 onValueChange(it)
             }
         )

@@ -34,7 +34,8 @@ class MonitoringService : Service(), SensorEventListener {
 
     val tag = "MonitoringService"
 
-    private var shakeThreshold = 12.0f  // TODO: get this from Settings
+    private var shakeThreshold = SettingsManager.DEFAULT_SHAKE_MAGNITUDE
+    private var zAxisFactor = SettingsManager.DEFAULT_Z_AXIS_FACTOR
 
     private lateinit var sensorManager: SensorManager
     private lateinit var telephonyManager: TelephonyManager
@@ -50,8 +51,10 @@ class MonitoringService : Service(), SensorEventListener {
         Log.i(tag, "onCreate")
         createMainNotificationChannel()
         startForeground(1, createNotification())
-        Log.d("ShakeService", "Service started")
+        Log.d(tag, "Service started")
         settingsManager = SettingsManager(this)
+        shakeThreshold = settingsManager.shakeMagnitude
+        zAxisFactor = settingsManager.zAxisFactor
         // Initialize shake detection and telephony handling here
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -126,7 +129,7 @@ class MonitoringService : Service(), SensorEventListener {
             val y = it.values[1]
             val z = it.values[2]
 
-            val shakeMagnitude = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            val shakeMagnitude = sqrt(x * x + y * y + zAxisFactor * z * z)
 
             if (shakeMagnitude > shakeThreshold) {
                 shakeStateMachine.handleShakeEvent()
@@ -192,9 +195,9 @@ class MonitoringService : Service(), SensorEventListener {
     // End call
 
     private fun endCall() {
-        if (!settingsManager.shakeToAnswer) {
+        if (!settingsManager.shakeToHangUp) {
             // TODO: Should we have a different setting here?
-            Log.i(tag, "shakeToAnswer option is disabled")
+            Log.i(tag, "shakeToHangUp option is disabled")
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
