@@ -8,9 +8,10 @@ import androidx.compose.ui.res.stringResource
 import com.imprologic.shaketocall.R
 import com.imprologic.shaketocall.services.MonitoringServiceStarter
 import com.imprologic.shaketocall.services.SettingsManager
+import com.imprologic.shaketocall.ui.widgets.ConfirmationDialog
+import com.imprologic.shaketocall.ui.widgets.DialogPreference
 import com.imprologic.shaketocall.ui.widgets.PreferenceSection
 import com.imprologic.shaketocall.ui.widgets.SliderPreference
-import kotlin.math.round
 
 
 @Composable
@@ -28,9 +29,8 @@ fun AdvancedOptions() {
             metric = stringResource(R.string.shake_metric),
             value = shakeMagnitudeState.floatValue,
             onValueChange = {
-                val newValue = round(100 * it) / 100
-                shakeMagnitudeState.floatValue = newValue
-                settingsManager.shakeMagnitude = newValue
+                shakeMagnitudeState.floatValue = it
+                settingsManager.shakeMagnitude = it
                 MonitoringServiceStarter.restartService(context)
             },
             valueRange = 10f.rangeTo(20f),
@@ -41,14 +41,33 @@ fun AdvancedOptions() {
             metric = "",
             value = zAxisFactorState.floatValue,
             onValueChange = {
-                val newValue = round(100 * it) / 100
-                zAxisFactorState.floatValue = newValue
-                settingsManager.zAxisFactor = newValue
+                zAxisFactorState.floatValue = it
+                settingsManager.zAxisFactor = it
                 MonitoringServiceStarter.restartService(context)
             },
             valueRange = 0f.rangeTo(1f),
             steps = 19
         )
+        DialogPreference(
+            title = stringResource(R.string.reset_advanced_preferences),
+            subtitle = stringResource(R.string.reset_advanced_preferences_description),
+            dialogContent = {
+                onDismissRequest ->
+                    ConfirmationDialog(
+                        dialogTitle = stringResource(R.string.reset_advanced_preferences_confirmation),
+                        onDismiss = { onDismissRequest() },
+                        onCancel = { onDismissRequest() },
+                        onConfirm = {
+                            onDismissRequest()
+                            settingsManager.resetAdvancedPreferences()
+                            shakeMagnitudeState.floatValue = settingsManager.shakeMagnitude
+                            zAxisFactorState.floatValue = settingsManager.zAxisFactor
+                        }
+                    )
+            }
+        )
     }
 
 }
+
+

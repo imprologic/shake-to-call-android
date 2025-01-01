@@ -19,8 +19,12 @@
     <string name="service_notification_content">Scuturarea și apelurile sunt monitorizate</string>
 
     <string name="advanced_options">Opțiuni avansate</string>
-    <string name="shake_magnitude">Shake magnitude</string>
+    <string name="shake_magnitude">Magnitudinea scuturării</string>
     <string name="shake_metric">m/s2</string>
-    <string name="z_axis_factor">z-axis factor</string>
+    <string name="z_axis_factor">Contributia axei Z</string>
+
+    <string name="reset_advanced_preferences">Resetați opțiunile avansate</string>
+    <string name="reset_advanced_preferences_confirmation">Resetați opțiunile avansate?</string>
+    <string name="reset_advanced_preferences_description">Apăsați aici pentru a reseta opțiunile avansate</string>
 
 </resources>
