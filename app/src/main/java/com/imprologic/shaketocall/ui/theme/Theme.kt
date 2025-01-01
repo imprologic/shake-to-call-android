@@ -23,6 +23,9 @@ private val LightColorPalette = lightColorScheme(
     onBackground = Color(0xFF1B1B1B),
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF1B1B1B),
+    surfaceVariant = Color(0xFFEEEEEE),
+    onSurfaceVariant = Color(0xFF1B1B1B),
+
     error = Color(0xFFD32F2F),
     onError = Color(0xFFFFFFFF)
 )
@@ -40,6 +43,9 @@ private val DarkColorPalette = darkColorScheme(
     onBackground = Color(0xFFE8F5E9),
     surface = Color(0xFF263238),
     onSurface = Color(0xFFE8F5E9),
+    surfaceVariant = Color(0xFF333333),
+    onSurfaceVariant = Color(0xFFFFFFFF),
+
     error = Color(0xFFEF5350),
     onError = Color(0xFF1B1B1B)
 )
