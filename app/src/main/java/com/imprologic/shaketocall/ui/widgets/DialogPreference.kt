@@ -23,16 +23,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.imprologic.shaketocall.R
 
 
 @Composable
-fun PhonePreference(
+fun DialogPreference(
     title: String,
     subtitle: String,
+    dialogTitle: String,
     value: String?,
     onValueChange: (String?) -> Unit,
-    sideContent: @Composable () -> Unit
+    sideContent: (@Composable () -> Unit)?
 ) {
     val dialogState = remember { mutableStateOf(false) }
 
@@ -59,12 +59,18 @@ fun PhonePreference(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        sideContent()
+        when {
+            sideContent != null ->
+                sideContent()
+        }
         when {
             dialogState.value ->
-                PhoneEntryDialog(
+                GenericDialog(
+                    title = dialogTitle,
                     value = value,
-                    onDismissRequest = { dialogState.value = false },
+                    onDismissRequest = {
+                        dialogState.value = false
+                    },
                     onConfirmation = {
                         dialogState.value = false
                         onValueChange(it)
@@ -76,9 +82,9 @@ fun PhonePreference(
 }
 
 
-// TODO: Move this to a separate file and generalize the Preference Widget
 @Composable
-fun PhoneEntryDialog(
+fun GenericDialog(
+    title: String,
     value: String?,
     onDismissRequest: () -> Unit,
     onConfirmation: (result: String?) -> Unit,
@@ -96,7 +102,7 @@ fun PhoneEntryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(R.string.alert_number_to_call),
+                    text = title,
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.titleMedium,
                 )
