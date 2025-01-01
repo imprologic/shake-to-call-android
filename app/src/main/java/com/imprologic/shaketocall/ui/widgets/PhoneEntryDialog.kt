@@ -22,19 +22,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
+import com.imprologic.shaketocall.R
+
 
 @Composable
 fun PhoneEntryDialog(
-    title: String,
     value: String?,
-    keyboardOptions: KeyboardOptions,
-    onDismissRequest: () -> Unit,
-    onConfirmation: (result: String?) -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: (result: String?) -> Unit,
+    onCancel: () -> Unit,
 ) {
     val resultState = remember { mutableStateOf(value) }
 
     Dialog(
-        onDismissRequest = { onDismissRequest() }
+        onDismissRequest = { onDismiss() }
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
@@ -44,7 +45,7 @@ fun PhoneEntryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = title,
+                    text = stringResource(R.string.alert_number_to_call),
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.titleMedium,
                 )
@@ -53,7 +54,7 @@ fun PhoneEntryDialog(
                     onValueChange = {
                         resultState.value = it
                     },
-                    keyboardOptions = keyboardOptions,
+                    keyboardOptions = KeyboardOptions(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -63,13 +64,13 @@ fun PhoneEntryDialog(
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     TextButton(
-                        onClick = { onDismissRequest() },
+                        onClick = { onCancel() },
                         modifier = Modifier.padding(8.dp),
                     ) {
                         Text(stringResource(android.R.string.cancel))
                     }
                     TextButton(
-                        onClick = { onConfirmation( resultState.value ) },
+                        onClick = { onConfirm( resultState.value ) },
                         modifier = Modifier.padding(8.dp),
                     ) {
                         Text(stringResource(android.R.string.ok))
