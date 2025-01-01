@@ -36,14 +36,6 @@ fun PhonePicker(
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    // Request permission if not granted
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        permissionState.value = isGranted
-        // TODO: Launch the system picker if the permission is granted
-    }
-
     // Contact picker launcher
     val contactPickerLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -70,13 +62,29 @@ fun PhonePicker(
         }
     }
 
+
+    fun invokeContactPicker() {
+        val intent = Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
+        contactPickerLauncher.launch(intent)
+    }
+
+
+    // Request permission if not granted
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        permissionState.value = isGranted
+        if (isGranted) {
+            invokeContactPicker()
+        }
+    }
+
     IconButton(
         onClick = {
             if (!permissionState.value) {
                 permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             } else {
-                val intent = Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
-                contactPickerLauncher.launch(intent)
+                invokeContactPicker()
             }
         }
     ) {
