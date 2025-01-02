@@ -182,6 +182,10 @@ class MonitoringService : Service(), SensorEventListener {
             return
         }
         val phoneToCall = settingsManager.defaultPhone
+        if (phoneToCall == null || phoneToCall.length == 0) {
+            Log.e(tag, "Phone number is empty")
+            return
+        }
         Log.i(tag, "Will call $phoneToCall")
         notifyShakeConfirmed()
         val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
