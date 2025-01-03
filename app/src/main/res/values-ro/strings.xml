@@ -27,7 +27,7 @@
     <string name="reset_advanced_preferences_confirmation">Resetați opțiunile avansate?</string>
     <string name="reset_advanced_preferences_description">Apăsați aici pentru a reseta opțiunile avansate</string>
 
-    <string name="accessibility_label_contacts">Apăsați pentru a alege din Agendă</string>
+    <string name="accessibility_label_contacts">Alege din Agendă</string>
     <string name="accessibility_label_number_to_call">Număr telefon</string>
 
 </resources>
