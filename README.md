@@ -13,7 +13,7 @@ Use at your own risk. The authors are not liable for any damages or issues arisi
 
 ## Screenshots
 
-![1-light.png](../artwork/screenshots/en/1-light.png)
+![1-light.png](artwork/screenshots/en/1-light.png)
 
-![4-dark.png](../artwork/screenshots/en/4-dark.png)
+![4-dark.png](artwork/screenshots/en/4-dark.png)
 
