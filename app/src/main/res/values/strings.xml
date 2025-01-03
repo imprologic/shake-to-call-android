@@ -27,4 +27,6 @@
     <string name="reset_advanced_preferences">Reset advanced options</string>
     <string name="reset_advanced_preferences_confirmation">Reset advanced preferences?</string>
     <string name="reset_advanced_preferences_description">Tap here to reset advanced preferences to their default values</string>
+    <string name="accessibility_label_contacts">Tap to pick a phone number from Contacts</string>
+    <string name="accessibility_label_number_to_call">Phone number</string>
 </resources>

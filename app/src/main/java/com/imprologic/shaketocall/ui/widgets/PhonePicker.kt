@@ -17,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.imprologic.shaketocall.R
 
 
 @Composable
@@ -90,7 +92,7 @@ fun PhonePicker(
     ) {
         Icon(
             imageVector = Icons.Filled.Person,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.accessibility_label_contacts),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(72.dp)
         )
