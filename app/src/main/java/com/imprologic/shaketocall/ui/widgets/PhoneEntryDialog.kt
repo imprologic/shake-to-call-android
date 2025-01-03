@@ -62,7 +62,8 @@ fun PhoneEntryDialog(
                         keyboardType = KeyboardType.Phone
                     ),
                     textStyle = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    placeholder = { Text(stringResource(R.string.accessibility_label_number_to_call)) },
                 )
                 Row(
                     modifier = Modifier
