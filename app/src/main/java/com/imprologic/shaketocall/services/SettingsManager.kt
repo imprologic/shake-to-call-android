@@ -8,8 +8,8 @@ import android.content.SharedPreferences
 class SettingsManager(context: Context) {
 
     companion object {
-        const val DEFAULT_SHAKE_MAGNITUDE = 12.0f
-        const val DEFAULT_Z_AXIS_FACTOR = 0.75f
+        const val DEFAULT_SHAKE_MAGNITUDE = 14.0f
+        const val DEFAULT_Z_AXIS_FACTOR = 0.3f
     }
 
 
