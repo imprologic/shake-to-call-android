@@ -49,6 +49,7 @@ fun CallOptions() {
                     onConfirm = {
                         onDismissRequest()
                         defaultPhoneState.value = it
+                        settingsManager.defaultPhone = it
                     },
                     onCancel = { onDismissRequest() },
                 )
