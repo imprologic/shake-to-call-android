@@ -61,9 +61,19 @@ class MonitoringService : Service(), SensorEventListener {
         accelerometer?.also { acc ->
             sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL)
         }
-        //
-        telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+        // Try to initialize telephony manager
+        try {
+            telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+            telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+        }  catch (e: SecurityException) {
+            Log.e(tag, "SecurityException: READ_PHONE_STATE permission denied. Cannot listen to phone state.", e)
+            // Consider stopping the service if it cannot perform its core function
+            stopSelf()
+        } catch (e: Exception) {
+            // Catch any other unexpected exceptions during service creation
+            Log.e(tag, "An unexpected error occurred in MonitoringService.onCreate.", e)
+            stopSelf()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
