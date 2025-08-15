@@ -22,6 +22,7 @@ import com.imprologic.shaketocall.services.PermissionHelper
 import com.imprologic.shaketocall.ui.AdvancedOptions
 import com.imprologic.shaketocall.ui.AnswerOptions
 import com.imprologic.shaketocall.ui.CallOptions
+import com.imprologic.shaketocall.ui.ExtraOptions
 import com.imprologic.shaketocall.ui.theme.MainTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,7 +52,6 @@ fun AppContent(
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
-//                        titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
@@ -68,6 +68,7 @@ fun AppContent(
                 CallOptions()
                 AnswerOptions()
                 AdvancedOptions()
+                ExtraOptions()
             }
         }
     }
