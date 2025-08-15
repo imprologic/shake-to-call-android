@@ -51,9 +51,7 @@ fun DialogPreference(
             sideContent()
         }
         if (dialogState.value) {
-            dialogContent(
-                { dialogState.value = false }
-            )
+            dialogContent { dialogState.value = false }
         }
     }
 
