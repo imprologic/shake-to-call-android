@@ -24,7 +24,7 @@ fun ExtraOptions() {
                 context.startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        "https://play.google.com/store/apps/developer?id=imprologic".toUri()
+                        "https://imprologic.com/other-apps/android".toUri()
                     )
                 )
             }
