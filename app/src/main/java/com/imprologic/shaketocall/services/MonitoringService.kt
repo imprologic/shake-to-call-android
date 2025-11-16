@@ -20,10 +20,12 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.telecom.TelecomManager
 import android.telephony.PhoneStateListener
+import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.imprologic.shaketocall.MainActivity
 import com.imprologic.shaketocall.R
 import kotlin.math.sqrt
@@ -61,9 +63,32 @@ class MonitoringService : Service(), SensorEventListener {
         accelerometer?.also { acc ->
             sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL)
         }
-        //
+        // Try to initialize telephony manager
+        // 1. Check for the permission before initializing the listener
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED) {
+            Log.e(tag, "READ_PHONE_STATE permission not granted. Cannot listen to phone state.")
+            // Stop the service if it can't perform its core function
+            stopSelf()
+            return // Exit onCreate early
+        }
+
+        // 2. Initialize TelephonyManager and register the listener
         telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                telephonyCallback?.let {
+                    telephonyManager.registerTelephonyCallback(mainExecutor, it)
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            }
+        } catch (e: Exception) {
+            // This catch block remains as a safeguard for other potential exceptions
+            Log.e(tag, "An unexpected error occurred while setting up TelephonyManager.", e)
+            stopSelf()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -76,7 +101,14 @@ class MonitoringService : Service(), SensorEventListener {
         super.onDestroy()
         Log.d(tag, "Service destroyed")
         sensorManager.unregisterListener(this)
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+        if (::telephonyManager.isInitialized) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                telephonyCallback?.let { telephonyManager.unregisterTelephonyCallback(it) }
+            } else {
+                @Suppress("DEPRECATION")
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            }
+        }
         stopForeground(true)
     }
 
@@ -143,6 +175,21 @@ class MonitoringService : Service(), SensorEventListener {
     }
 
 
+    // --- ADD NEW CALLBACK FOR API 31+ ---
+    private val telephonyCallback by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            object : TelephonyCallback(), TelephonyCallback.CallStateListener {
+                override fun onCallStateChanged(state: Int) {
+                    phoneState = state
+                    Log.i(tag, "Phone state changed (API 31+): $phoneState")
+                }
+            }
+        } else {
+            null
+        }
+    }
+
+
     // Phone events listener
 
     private val phoneStateListener = object : PhoneStateListener() {
@@ -156,12 +203,16 @@ class MonitoringService : Service(), SensorEventListener {
 
     private fun actOnShake() {
         Log.i(tag, "Phone state is $phoneState")
-        if (phoneState == TelephonyManager.CALL_STATE_IDLE) {
-            makeCall()
-        } else if (phoneState == TelephonyManager.CALL_STATE_OFFHOOK) {
-            endCall()
-        } else if (phoneState == TelephonyManager.CALL_STATE_RINGING) {
-            answerCall()
+        when (phoneState) {
+            TelephonyManager.CALL_STATE_IDLE -> {
+                makeCall()
+            }
+            TelephonyManager.CALL_STATE_OFFHOOK -> {
+                endCall()
+            }
+            TelephonyManager.CALL_STATE_RINGING -> {
+                answerCall()
+            }
         }
     }
 
@@ -182,7 +233,7 @@ class MonitoringService : Service(), SensorEventListener {
             return
         }
         val phoneToCall = settingsManager.defaultPhone
-        if (phoneToCall == null || phoneToCall.length == 0) {
+        if (phoneToCall.isNullOrEmpty()) {
             Log.e(tag, "Phone number is empty")
             return
         }
