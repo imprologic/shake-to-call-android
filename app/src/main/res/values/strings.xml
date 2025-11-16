@@ -8,6 +8,8 @@
     <string name="label_number_to_call">Number to call</string>
     <string name="description_number_to_call">Tap here to enter the default number, or the icon to the right to pick from Contacts</string>
     <string name="alert_number_to_call">Enter the number to call</string>
+    <string name="accessibility_label_contacts">Pick a phone number from Contacts</string>
+    <string name="accessibility_label_number_to_call">Phone number</string>
 
     <string name="outgoing_call_options">Outgoing call options</string>
     <string name="shake_to_answer">Shake to Answer</string>
@@ -27,6 +29,9 @@
     <string name="reset_advanced_preferences">Reset advanced options</string>
     <string name="reset_advanced_preferences_confirmation">Reset advanced preferences?</string>
     <string name="reset_advanced_preferences_description">Tap here to reset advanced preferences to their default values</string>
-    <string name="accessibility_label_contacts">Pick a phone number from Contacts</string>
-    <string name="accessibility_label_number_to_call">Phone number</string>
+
+    <string name="extras_section">Extras</string>
+    <string name="other_apps_title">Other apps</string>
+    <string name="other_apps_description">Discover other apps by Imprologic</string>
+
 </resources>

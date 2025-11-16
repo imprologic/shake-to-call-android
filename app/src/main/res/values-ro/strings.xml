@@ -9,6 +9,9 @@
     <string name="alert_number_to_call">Introduceți numărul mai jos</string>
     <string name="label_number_to_call">Număr apelat</string>
 
+    <string name="accessibility_label_contacts">Alege din Agendă</string>
+    <string name="accessibility_label_number_to_call">Număr telefon</string>
+
     <string name="outgoing_call_options">Opțiuni răspuns</string>
     <string name="shake_to_answer">Scutură pentru a răspunde</string>
     <string name="shake_to_answer_description">Apăsați pe comutatorul din dreapta pentru a activa sau dezactiva această opțiune</string>
@@ -27,7 +30,9 @@
     <string name="reset_advanced_preferences_confirmation">Resetați opțiunile avansate?</string>
     <string name="reset_advanced_preferences_description">Apăsați aici pentru a reseta opțiunile avansate</string>
 
-    <string name="accessibility_label_contacts">Alege din Agendă</string>
-    <string name="accessibility_label_number_to_call">Număr telefon</string>
+    <string name="extras_section">Extra</string>
+    <string name="other_apps_title">Alte aplicații</string>
+    <string name="other_apps_description">Descoperiți alte aplicații create de Imprologic</string>
+
 
 </resources>

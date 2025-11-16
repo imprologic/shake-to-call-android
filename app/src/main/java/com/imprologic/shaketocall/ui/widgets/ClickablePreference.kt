@@ -9,21 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun DialogPreference(
+fun ClickablePreference(
     title: String,
     subtitle: String,
-    dialogContent: @Composable (onDismissRequest: () -> Unit) -> Unit,
-    sideContent: (@Composable () -> Unit)? = null
+    onClick: () -> Unit
 ) {
-    val dialogState = remember { mutableStateOf(false) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -34,7 +29,7 @@ fun DialogPreference(
             modifier = Modifier
                 .weight(1f)
                 .clickable(
-                    onClick = { dialogState.value = !dialogState.value }
+                    onClick = onClick
                 )
         ) {
             Text(
@@ -46,12 +41,6 @@ fun DialogPreference(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-        }
-        if (sideContent != null) {
-            sideContent()
-        }
-        if (dialogState.value) {
-            dialogContent { dialogState.value = false }
         }
     }
 

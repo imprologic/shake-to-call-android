@@ -3,6 +3,7 @@ package com.imprologic.shaketocall
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import com.imprologic.shaketocall.services.PermissionHelper
 import com.imprologic.shaketocall.ui.AdvancedOptions
 import com.imprologic.shaketocall.ui.AnswerOptions
 import com.imprologic.shaketocall.ui.CallOptions
+import com.imprologic.shaketocall.ui.ExtraOptions
 import com.imprologic.shaketocall.ui.theme.MainTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +32,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         setContent {
             AppContent()
         }
@@ -51,7 +55,6 @@ fun AppContent(
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
-//                        titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
@@ -68,6 +71,7 @@ fun AppContent(
                 CallOptions()
                 AnswerOptions()
                 AdvancedOptions()
+                ExtraOptions()
             }
         }
     }

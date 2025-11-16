@@ -25,7 +25,7 @@ fun CallOptions() {
 
 
     PreferenceSection(
-        title = stringResource(R.string.incoming_call_options)
+        title = stringResource(R.string.outgoing_call_options)
     ) {
         SwitchPreference(
             title = stringResource(R.string.shake_to_call),
