@@ -1,3 +1,7 @@
+*In loving memory of my father, who battled glaucoma during the last years of his life.*
+
+---
+
 # Shake to Call / Answer / Hangup
 
 This is an Android app designed specifically for users with very low vision.
@@ -16,7 +20,3 @@ Use at your own risk. The authors are not liable for any damages or issues arisi
 ![1-light.png](artwork/screenshots/en/1-light.png)
 
 ![4-dark.png](artwork/screenshots/en/4-dark.png)
-
----
-
-*In loving memory of my father, who battled glaucoma during the last years of his life.*
