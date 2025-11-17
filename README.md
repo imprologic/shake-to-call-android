@@ -17,3 +17,6 @@ Use at your own risk. The authors are not liable for any damages or issues arisi
 
 ![4-dark.png](artwork/screenshots/en/4-dark.png)
 
+---
+
+*In loving memory of my father, who battled glaucoma during the last years of his life.*
