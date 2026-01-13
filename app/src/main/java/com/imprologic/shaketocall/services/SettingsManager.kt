@@ -51,6 +51,8 @@ class SettingsManager(context: Context) {
             prefs.edit().putFloat("z_axis_factor", value).apply()
         }
 
+    var anyShakeOptionEnabled: Boolean = false
+        get() = shakeToCall || shakeToAnswer || shakeToHangUp
 
     fun resetAdvancedPreferences() {
         shakeMagnitude = DEFAULT_SHAKE_MAGNITUDE

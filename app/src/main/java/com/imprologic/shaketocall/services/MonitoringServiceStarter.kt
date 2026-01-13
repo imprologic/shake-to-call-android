@@ -47,7 +47,7 @@ class MonitoringServiceStarter {
          */
         fun manageService(context: Context) {
             val settingsManager = SettingsManager(context)
-            val shouldRun = settingsManager.shakeToCall || settingsManager.shakeToAnswer || settingsManager.shakeToHangUp
+            val shouldRun = settingsManager.anyShakeOptionEnabled
             val isRunning = isServiceRunning(context)
             Log.i(TAG, "shouldRun: $shouldRun, isRunning: $isRunning")
             if (shouldRun == isRunning) {
