@@ -10,7 +10,7 @@ class MonitoringServiceStarter {
 
     companion object {
 
-        const val TAG = "MonitoringServiceStarter"
+        const val TAG = "MonitoringServiceStrtr"
 
         private fun startService(context: Context) {
             Log.i(TAG, "Monitoring service will start on SDK " + Build.VERSION.SDK_INT)

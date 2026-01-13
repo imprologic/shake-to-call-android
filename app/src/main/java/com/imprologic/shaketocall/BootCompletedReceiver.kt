@@ -8,7 +8,7 @@ import com.imprologic.shaketocall.services.MonitoringServiceStarter
 
 class BootCompletedReceiver : BroadcastReceiver() {
 
-    val tag = "BootCompletedReceiver"
+    private val tag = "BootCompletedReceiver"
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action != Intent.ACTION_BOOT_COMPLETED) {
@@ -20,7 +20,11 @@ class BootCompletedReceiver : BroadcastReceiver() {
             return
         }
         Log.i(tag, "Device rebooted. Running manageService...")
-        MonitoringServiceStarter.manageService(context)
+        try {
+            MonitoringServiceStarter.manageService(context)
+        } catch (e: Exception) {
+            Log.e(tag, "Exception while running manageService", e)
+        }
     }
 
 }
