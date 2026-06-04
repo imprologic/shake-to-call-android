@@ -28,6 +28,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.imprologic.shaketocall.MainActivity
 import com.imprologic.shaketocall.R
+import com.imprologic.shaketocall.utils.NotificationUtils
 import kotlin.math.sqrt
 
 private const val channelName = "shake_service_channel"
@@ -52,7 +53,14 @@ class MonitoringService : Service(), SensorEventListener {
         super.onCreate()
         Log.i(tag, "onCreate")
         createMainNotificationChannel()
-        startForeground(1, createNotification())
+        try {
+            startForeground(1, createNotification())
+        } catch (e: Exception) {
+            Log.e(tag, "Failed to start foreground service", e)
+            NotificationUtils.showRestartNotification(this)
+            stopSelf()
+            return
+        }
         Log.d(tag, "Service started")
         settingsManager = SettingsManager(this)
         shakeThreshold = settingsManager.shakeMagnitude

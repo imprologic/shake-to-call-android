@@ -10,7 +10,7 @@ class MonitoringServiceStarter {
 
     companion object {
 
-        const val TAG = "MonitoringServiceStarter"
+        const val TAG = "MonitoringServiceStrtr"
 
         private fun startService(context: Context) {
             Log.i(TAG, "Monitoring service will start on SDK " + Build.VERSION.SDK_INT)
@@ -47,7 +47,7 @@ class MonitoringServiceStarter {
          */
         fun manageService(context: Context) {
             val settingsManager = SettingsManager(context)
-            val shouldRun = settingsManager.shakeToCall || settingsManager.shakeToAnswer || settingsManager.shakeToHangUp
+            val shouldRun = settingsManager.anyShakeOptionEnabled
             val isRunning = isServiceRunning(context)
             Log.i(TAG, "shouldRun: $shouldRun, isRunning: $isRunning")
             if (shouldRun == isRunning) {
