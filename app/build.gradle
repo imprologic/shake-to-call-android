@@ -4,6 +4,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
 android {
     namespace 'com.imprologic.shaketocall'
     compileSdk 35
@@ -16,6 +21,35 @@ android {
         versionName "0.5.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        googlePlay {
+            storeFile     file(keystoreProperties["GP_KEYSTORE_PATH"])
+            storePassword keystoreProperties["GP_STORE_PASS"]
+            keyAlias      keystoreProperties["GP_KEY_ALIAS"]
+            keyPassword   keystoreProperties["GP_KEY_PASS"]
+        }
+        github {
+            storeFile     file(keystoreProperties["GH_KEYSTORE_PATH"])
+            storePassword keystoreProperties["GH_STORE_PASS"]
+            keyAlias      keystoreProperties["GH_KEY_ALIAS"]
+            keyPassword   keystoreProperties["GH_KEY_PASS"]
+        }
+    }
+
+    flavorDimensions "distribution"
+
+    productFlavors {
+        googleplay {
+            dimension "distribution"
+            signingConfig signingConfigs.googlePlay
+            // applicationIdSuffix, versionNameSuffix, etc. if needed
+        }
+        github {
+            dimension "distribution"
+            signingConfig signingConfigs.github
+        }
     }
 
     buildTypes {
