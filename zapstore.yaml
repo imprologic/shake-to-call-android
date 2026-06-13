@@ -1,0 +1,15 @@
+repository: https://github.com/imprologic/shake-to-call-android
+description: 'The app is designed specifically for users with very low vision. It offers intuitive features to simplify call handling:  - Shake your phone to call a predefined number  - Shake your phone to answer an incoming call  - Shake your phone to end an ongoing call  These options can be easily enabled or disabled from the app''s main screen.You have to shake the phone for at least 1/2 second for the enabled functions to work.IMPORTANT: After upgrading the app, please launch it at least once by tapping on its icon. This will make sure the monitoring service runs in the background and listens to shake events.Explanation of the permissions requested by this app:- Telephone permissions: Required to make and answer calls, as well as to detect the phone''s state (e.g., call in progress).- Notification permissions: Used to allow the app to run in the background as a service. This functionality is active only when at least one feature switch is enabled.- Contacts permission (optional): Select a contact phone'
+summary: Shake your phone to call a predefined number or answer calls
+tags:
+    - telephony
+    - phone
+license: GPL-3.0
+website: https://imprologic.com/open-source/shake-to-call-answer/
+icon: https://play-lh.googleusercontent.com/uEo9X8nDlwFbRRpBMVUMru43I-0aXcQ-BpE5C_02AyZyi_CfhIAqs7wB9O2J5P66_pgJuOJei7dE2ID_rNWI8w=w480-h960-rw
+images:
+    - https://github.com/imprologic/shake-to-call-android/blob/main/artwork/screenshots/en/1-light.png
+    - https://github.com/imprologic/shake-to-call-android/blob/main/artwork/screenshots/en/4-dark.png
+metadata_sources:
+    - github
+pubkey: npub1us4pzuktqxsg88thlxc0pn4ze6ukpf672yetkcj4h34gr95q9ufsdlcq8k
